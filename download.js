@@ -8,8 +8,8 @@ for (i = 0; i < resourceContainer.length; i++) {
 	}
 	name = name.replace(/:/g , " -");
 	const fullname = name.slice(0,-5) + ".pdf"
-	const url = resourceContainer[i].querySelector("a").href;
+	const url = resourceContainer[i].querySelector("a").href + "&redirect=1";
 	resources.push([url, fullname]);
 }
-
+console.log(resources);
 resources;
