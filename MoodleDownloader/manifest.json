@@ -1,0 +1,18 @@
+ {
+  "manifest_version": 2,
+
+  "name": "Moodle Downloader",
+  "description": "A chrome extension for downloading Moodle resources",
+  "version": "0.1",
+  "browser_action": {
+    "default_icon": "logo.png"
+//    "default_popup": "popup.html"
+  },
+  "background": {
+    "scripts": ["background.js"]
+  },
+  "permissions": [
+    "activeTab",
+    "downloads"
+  ]
+}
