@@ -3,7 +3,7 @@ chrome.browserAction.onClicked.addListener(function(tab){chrome.tabs.executeScri
 	
 	for (i = 0; i < result[0][0].length; i++) {
 		const resource = result[0][0][i]
-		chrome.downloads.download({url: resource[0], filename: resource[1]})
+		chrome.downloads.download({url: resource[0]})
 	}
 	
 	for (i = 0; i < result[0][1].length; i++) {
