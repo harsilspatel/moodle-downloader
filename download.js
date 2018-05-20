@@ -18,11 +18,11 @@ for (i = 0; i < resourceContainer.length; i++) {
 //console.log(resources);
 
 
-var foldersContainers = document.getElementsByClassName("box generalbox folderbuttons");
+var foldersContainers = document.getElementsByClassName("singlebutton");
 var folders = [];
 for (i = 0; i < foldersContainers.length; i++) {
-	var folderId = foldersContainers[i].querySelectorAll("input")[1].value;
-	var url = "https://moodle.vle.monash.edu/mod/folder/download_folder.php?id=" + folderId;
+	var url = foldersContainers[i].querySelector("form").action + "?id=" + foldersContainers[i].querySelectorAll("input")[1].value
+
 	folders.push(url)
 }
 //console.log(folders);
