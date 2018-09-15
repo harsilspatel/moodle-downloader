@@ -1,7 +1,13 @@
 function main() {
 	console.log('it works 😆');
-	let files = getFiles();
-	
+	let selectedResources = document.getElementById("selectedResources");
+	let x = document.createElement("option")
+	x.innerHTML = "x"
+	x.value = "https:github.com/harsilspatel"
+	selectedResources.appendChild(x);
+
+
+	// let files = getFiles();
 }
 
 function getFiles() {
@@ -14,4 +20,9 @@ function getFiles() {
 			fileName: resource.getElementsByClassName("instancename")[0].innerText.slice(0, -4),
 			fileUrl: resource.querySelector("a").href + "&redirect=1"
 		}));
+}
+
+function downloadStuff() {
+	let selectedResources = document.getElementById("selectedResources");
+	console.log(Array.from(selectedResources.options).filter(x => x.selected).forEach(x => console.log(x, x.value)));
 }
