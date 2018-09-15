@@ -6,8 +6,9 @@
         <link rel="stylesheet" href="./css/material.min.css">
         <script src="./css/material.min.js"></script>
         <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+        <script src="./popup.js"></script>
     </head>
-    <body>
+    <body onload="main()">
       <style>
         .demo-card-wide.mdl-card {
           background: #AECEF8;
@@ -20,7 +21,7 @@
           <h2 class="mdl-card__title-text">Hello there! ✌🏻</h2>
         </div>
         <div class="mdl-card__actions mdl-card--border">
-          <select multiple class="mdl-textfield__input">
+          <select multiple class="mdl-textfield__input" id="selectedResources">
             <option>Lorem</option>
             <option>ipsum</option>
             <option>dolor</option>

@@ -1,12 +1,17 @@
 function main() {
 	console.log('it works 😆');
-	getFiles();
+	let files = getFiles();
+	
 }
 
 function getFiles() {
-	let resourceContainers = document.getElementsByClassName("activityinstance");
-	resourceContainers
+	let files = []
+	let resourceContainers = Array.from(document.getElementsByClassName("activityinstance")); // realised this is not beautifulSoup 😆
+	return resourceContainers
 		.filter(resource => (	// filtering out just the files. Noob filtering going on here 😝
 			resource.getElementsByClassName("instancename")[0].innerText.slice(-4) == "File"))
-		.forEach(resource => console.log(resource));
+		.map(resource => ({
+			fileName: resource.getElementsByClassName("instancename")[0].innerText.slice(0, -4),
+			fileUrl: resource.querySelector("a").href + "&redirect=1"
+		}));
 }
