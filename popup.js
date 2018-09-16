@@ -29,6 +29,7 @@ function downloadStuff() {
 	console.log('button pressed!')
 	let selectedResources = document.getElementById("selectedResources");
 	console.log(Array.from(selectedResources.options).filter(x => x.selected).forEach(x => console.log(x, x.value)));
+	console.log(Array.from(selectedResources.options).filter(x => x.selected).forEach(x => chrome.downloads.download({url: x.value})));
 }
 
 console.log('😆')

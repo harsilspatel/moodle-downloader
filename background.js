@@ -10,4 +10,19 @@ function getFiles() {
 		}));
 }
 
+function getFolders() {
+	console.log('inside getFolders')
+	var foldersContainers = document.getElementsByClassName("singlebutton");
+	for (i = 0; i < foldersContainers.length; i++) {
+		var url =
+			foldersContainers[i].querySelector("form").action +
+			"?id=" +
+			foldersContainers[i].querySelectorAll("input")[1].value;
+		folders.push(url);
+	}
+	//console.log(folders);
+	return folders;
+}
+
 getFiles();
+// getFolders(); //to-do
