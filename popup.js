@@ -1,15 +1,23 @@
 function main() {
+
 	let button = document.getElementById("downloadStuff");
-	button.addEventListener("click", () => {downloadStuff()})
+	button.addEventListener("click", () => {downloadStuff();});
+
 	chrome.tabs.executeScript({file: "background.js"}, function(result) {
-		let files = result[0];
-		files.forEach(file => {
-			let fileOption = document.createElement("option");
-			fileOption.innerHTML = file.name;
-			fileOption.value = file.url;
-			selectedResources.appendChild(fileOption);
-		});
-		console.log('populated!')
+		try {
+			let selectedResources = document.getElementById("selectedResources");
+			let files = result[0];
+			files.forEach(file => {
+				let fileOption = document.createElement("option");
+				fileOption.innerHTML = file.name;
+				fileOption.value = file.url;
+				selectedResources.appendChild(fileOption);
+				console.log('populated!');
+
+			});
+		} catch(error) {
+			console.log(error)
+		}
 	});
 }
 

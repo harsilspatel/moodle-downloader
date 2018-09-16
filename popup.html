@@ -3,27 +3,36 @@
 <html>
     <head>
         <title>moodleDownloader</title>
+        <link rel="stylesheet"  type="text/css" href="./css/style.css">
         <link rel="stylesheet" href="./css/material.min.css">
         <script src="./css/material.min.js"></script>
         <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
         <script src="./popup.js"></script>
     </head>
     <body>
-      <style>
+      <!-- <style>
         .demo-card-wide.mdl-card {
-          background: #AECEF8;
+          background: rgb(231, 242, 255);
         }
-      </style>
+      </style> -->
       
       
       <div class="demo-card-wide mdl-card mdl-shadow--2dp">
         <div class="mdl-card__title">
-          <h2 class="mdl-card__title-text">Hello there! ✌🏻</h2>
+          <h2 class="mdl-card__title-text">moodleDownloader 📚</h2>
         </div>
+
         <div class="mdl-card__actions mdl-card--border">
+          <small style="font-size:75%; padding-left: 1%;">Click and drag or use ⌘ key to select multiple options:</small>
           <select multiple class="mdl-textfield__input" id="selectedResources">
+              <option>Lorem</option>
+              <option>ipsum</option>
+              <option>dolor</option>
+              <option>sit</option>
+              <option>amet</option>
           </select>
-          <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored" id="downloadStuff">Download! 😎</button>
+          <br>
+          <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored" id="downloadStuff">Download</button>
         </div>
       </div>
         
