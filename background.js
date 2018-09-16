@@ -1,25 +1,13 @@
-chrome.browserAction.onClicked.addListener(function(tab) {
-	chrome.tabs.executeScript({ file: "download.js" }, function(result) {
-		//	console.log(result);
-		function downloadFiles(result) {
-			for (i = 0; i < result[0][0].length; i++) {
-				const resource = result[0][0][i];
-				chrome.downloads.download({ url: resource[0] });
-			}
-		}
+function getFiles() {
+	console.log('inside getFiles')
+	let resourceContainers = Array.from(document.getElementsByClassName("activityinstance")); // realised this is not beautifulSoup 😆
+	return resourceContainers
+		.filter(resource => (	// filtering out just the files. Noob filtering going on here 😝
+			resource.getElementsByClassName("instancename")[0].innerText.slice(-4) == "File"))
+		.map(resource => ({
+			name: resource.getElementsByClassName("instancename")[0].innerText.slice(0, -4),
+			url: resource.querySelector("a").href + "&redirect=1"
+		}));
+}
 
-		function downloadFolders(result) {
-			for (i = 0; i < result[0][1].length; i++) {
-				console.log("opening ", result[0][1][i]);
-				chrome.tabs.create({ url: result[0][1][i] });
-			}
-		}
-		downloadFiles(result);
-		downloadFolders(result);
-	});
-});
-
-//chrome.browserAction.onClicked.addListener(function(tab){chrome.tabs.executeScript({file: "download.js"}, function(result){
-//	console.log(result[0]);
-//	console.log(result[1]);
-//	})});
+getFiles();
