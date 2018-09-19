@@ -15,12 +15,14 @@ source: https://developer.chrome.com/extensions/getstarted
 
 ## Usage 🖱
 1. Login in to your moodle (for example https://moodle.vle.monash.edu)
-2. Open the week (section) from where you want to get the resources
-3. Click on the extension icon
+2. Open the week (section) from where you would like to download the resources from
+3. Click on the extension icon and select the resources to be downloaded.
+  - Click and drag or use ⌘ key to select multiple options:
+4. Hit the `Download` button to get the resources! 
 
 
 ## To-dos 📝
-- Options to download files
+- ~~Options to download files~~
 - Firefox extension
 - Safari extension
 
