@@ -8,6 +8,7 @@
     "default_icon": "logo.png",
     "default_popup": "popup.html"
   },
+  "content_security_policy": "script-src 'self' https://ssl.google-analytics.com; object-src 'self'",
   "permissions": [
     "activeTab",
     "downloads"
