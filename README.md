@@ -20,6 +20,15 @@ source: https://developer.chrome.com/extensions/getstarted
     - Click and drag or use ⌘ key to select multiple options:
 4. Hit the `Download` button to get the resources! 
 
+## GIFs
+### Without MoodleDownloader
+<img src="screencaptures/withoutMD.gif" width="60%">
+~38 seconds to download 10 files 😩
+
+### With MoodleDownloader
+<img src="screencaptures/withMD.gif" width="60%">
+~10 seconds to download 10 files 🤩
+
 
 ## To-dos 📝
 - ~~Options to download files~~
