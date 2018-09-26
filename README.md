@@ -14,13 +14,13 @@ If you prefer to install manually, you can find the latest binaries [here](https
 4. Hit the `Download` button to get the resources! 
 
 ## GIFs 🎞
-### Without MoodleDownloader
-~38 seconds to download 10 files 😩
+### Without MoodleDownloader 😩
+~38 seconds to download 10 files
 
 <img src="screencaptures/withoutMD.gif" width="60%">
 
-### With MoodleDownloader
-~10 seconds to download 10 files 🤩
+### With MoodleDownloader 🤩
+~10 seconds to download 10 files
 
 <img src="screencaptures/withMD.gif" width="60%">
 
@@ -30,7 +30,12 @@ If you prefer to install manually, you can find the latest binaries [here](https
 #### Motivation 💡
 Realised in the week 11 that I don't have most of the resources 😭 
 
+<br/>
+
 #### Credits 👏🏻
 Icon made by [kiranshastry](https://www.flaticon.com/authors/kiranshastry) from [flaticon](https://www.flaticon.com)
 
+<br/>
 
+#### License 📑
+[MIT](LICENSE.md)
