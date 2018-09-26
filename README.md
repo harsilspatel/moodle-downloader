@@ -26,6 +26,9 @@ source: https://developer.chrome.com/extensions/getstarted
 - Firefox extension
 - Safari extension
 
+
+Icon made by [kiranshastry](https://www.flaticon.com/authors/kiranshastry) from [flaticon](https://www.flaticon.com)
+<br/>
 <br/>
 
 #### Motivation 💡
