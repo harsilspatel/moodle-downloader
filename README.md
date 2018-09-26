@@ -2,16 +2,9 @@
 A chrome extension for downloading Moodle resources 💾
 
 ## Download ⬇️
-Get the latest version of MoodleDownloader from [here](https://github.com/harsilspatel/MoodleDownloader/releases/latest)
+Install the latest version of MoodleDownloader from [Chrome Web Store](https://chrome.google.com/webstore/detail/moodle-downloader/ohhocacnnfaiphiahofcnfakdcfldbnh).
 
-## Installation 💻
-1. Open the Extension Management page by navigating to `chrome://extensions` (The Extension Management page can also be opened by clicking on the Chrome menu, hovering over More Tools then selecting Extensions)
-2. Enable Developer Mode by clicking the toggle switch next to Developer mode.
-3. Click the LOAD UNPACKED button and select the extension directory.
-
-![alt text](https://developer.chrome.com/static/images/get_started/load_extension.png)
-
-source: https://developer.chrome.com/extensions/getstarted
+If you prefer to install manually, you can find the latest binaries [here](https://github.com/harsilspatel/MoodleDownloader/releases/latest).
 
 ## Usage 🖱
 1. Login in to your moodle (for example https://moodle.vle.monash.edu)
@@ -20,25 +13,24 @@ source: https://developer.chrome.com/extensions/getstarted
     - Click and drag or use ⌘ key to select multiple options:
 4. Hit the `Download` button to get the resources! 
 
-## GIFs
+## GIFs 🎞
 ### Without MoodleDownloader
-<img src="screencaptures/withoutMD.gif" width="60%">
 ~38 seconds to download 10 files 😩
 
+<img src="screencaptures/withoutMD.gif" width="60%">
+
 ### With MoodleDownloader
-<img src="screencaptures/withMD.gif" width="60%">
 ~10 seconds to download 10 files 🤩
 
+<img src="screencaptures/withMD.gif" width="60%">
 
-## To-dos 📝
-- ~~Options to download files~~
-- Firefox extension
-- Safari extension
-
-
-Icon made by [kiranshastry](https://www.flaticon.com/authors/kiranshastry) from [flaticon](https://www.flaticon.com)
 <br/>
 <br/>
 
 #### Motivation 💡
 Realised in the week 11 that I don't have most of the resources 😭 
+
+#### Credits 👏🏻
+Icon made by [kiranshastry](https://www.flaticon.com/authors/kiranshastry) from [flaticon](https://www.flaticon.com)
+
+
