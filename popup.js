@@ -1,19 +1,22 @@
 function main() {
+	
 
 	let button = document.getElementById("downloadStuff");
-	button.addEventListener("click", () => {downloadStuff();});
+	button.addEventListener("click", () => downloadStuff());
 
+	// executing background.js to populate the select form
 	chrome.tabs.executeScript({file: "background.js"}, function(result) {
 		try {
 			let selectedResources = document.getElementById("selectedResources");
 			let files = result[0];
 			files.forEach(file => {
 				let fileOption = document.createElement("option");
+				// creating option element such that the text will be
+				// the resource name and the option value its url.
 				fileOption.innerHTML = file.name;
 				fileOption.value = file.url;
 				selectedResources.appendChild(fileOption);
 				console.log('populated!');
-
 			});
 		} catch(error) {
 			console.log(error)
@@ -40,7 +43,6 @@ function downloadStuff() {
 	console.log(Array.from(selectedResources.options).filter(x => x.selected).forEach(x => chrome.downloads.download({url: x.value})));
 }
 
-console.log('😆')
 document.addEventListener('DOMContentLoaded', function() {
 	main();
 });
