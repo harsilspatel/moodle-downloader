@@ -1,4 +1,4 @@
-# MoodleDownloader 
+# MoodleDownloader
 A chrome extension for downloading Moodle resources 💾
 
 ## Download ⬇️
@@ -11,7 +11,7 @@ If you prefer to install manually, you can find the latest binaries [here](https
 2. Open the week (section) from where you would like to download the resources from
 3. Click on the extension icon and select the resources to be downloaded.
     - Click and drag or use ⌘ key to select multiple options:
-4. Hit the `Download` button to get the resources! 
+4. Hit the `Download` button to get the resources!
 
 ## GIFs 🎞
 ### Without MoodleDownloader 😩
@@ -28,7 +28,7 @@ If you prefer to install manually, you can find the latest binaries [here](https
 <br/>
 
 #### Motivation 💡
-Realised in the week 11 that I don't have most of the resources 😭 
+Realised in the week 11 that I don't have most of the resources 😭
 
 <br/>
 
