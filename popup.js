@@ -38,8 +38,9 @@ function main() {
 
 				// creating option element such that the text will be
 				// the resource name and the option value its url.
-				fileOption.innerHTML = file.name;
 				fileOption.value = file.url;
+				fileOption.title = file.name;
+				fileOption.innerHTML = file.name;
 				resourceSelector.appendChild(fileOption);
 				console.log('populated!');
 			});
