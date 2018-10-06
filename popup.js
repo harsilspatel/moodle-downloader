@@ -7,42 +7,38 @@ function main() {
 		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
 		})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
 
-		ga('create', 'UA-119398707-1', 'auto');  // Replace with your property ID.
-		ga('send', 'pageview');
+		ga('create', 'UA-119398707-1', 'auto');
+		ga('set', 'checkProtocolTask', null);
+		ga('send', 'pageview', '/popup.html');
 
-	// var _gaq = _gaq || [];
-	// _gaq.push(['_setAccount', 'UA-119398707-1']);
-	// _gaq.push(['_trackPageview']);
+	// array of titles of resources in lower case
+	let resourceTitle = []
 
-	// (function() {
-	// 	var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-	// 	ga.src = 'https://ssl.google-analytics.com/ga.js';
-	// 	var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-	// })();
-
-	// downloadStuff on button press
-	let button = document.getElementById("downloadStuff");
-	button.addEventListener("click", () => downloadStuff());
+	// downloadResources on button press
+	let button = document.getElementById("downloadResources");
+	button.addEventListener("click", () => downloadResources());
 
 	// filter resources on input
 	let searchField = document.getElementById("search");
-	searchField.addEventListener("input", () => filterList());
+	searchField.addEventListener("input", () => filterOptions(resourceTitle));
 
 	// executing background.js to populate the select form
 	chrome.tabs.executeScript({file: "background.js"}, function(result) {
 		try {
 			let resourceSelector = document.getElementById("resourceSelector");
-			let files = result[0];
-			files.forEach(file => {
-				let fileOption = document.createElement("option");
+			let resources = result[0];
+			resources.forEach(resource => {
+				let resourceOption = document.createElement("option");
+
+				// saving titles in lower case
+				resourceTitle.push(resource.name.toLowerCase())
 
 				// creating option element such that the text will be
 				// the resource name and the option value its url.
-				fileOption.value = file.url;
-				fileOption.title = file.name;
-				fileOption.innerHTML = file.name;
-				resourceSelector.appendChild(fileOption);
-				console.log('populated!');
+				resourceOption.value = resource.url;
+				resourceOption.title = resource.name;
+				resourceOption.innerHTML = resource.name;
+				resourceSelector.appendChild(resourceOption);
 			});
 		} catch(error) {
 			console.log(error);
@@ -50,24 +46,33 @@ function main() {
 	});
 }
 
-function filterList() {
+function filterOptions(resourceTitle) {
 	let searchField = document.getElementById("search");
 	let query = searchField.value.toLowerCase();
+	let options = document.getElementById("resourceSelector").options;
 
-	let resourceSelector = document.getElementById("resourceSelector");
-	Array.from(resourceSelector.options).forEach(option => {
-		option.innerHTML.toLowerCase().includes(query) ?
-		option.removeAttribute('hidden') :
-		option.setAttribute('hidden', 'hidden');
-	});
+	resourceTitle.forEach(function(title, index) {
+		title.includes(query) ?
+		options[index].removeAttribute('hidden') :
+		options[index].setAttribute('hidden', 'hidden');
+	})
 
+	// Array.from(resourceSelector.options).forEach(option => {
+	// 	option.innerHTML.toLowerCase().includes(query) ?
+	// 	option.removeAttribute('hidden') :
+	// 	option.setAttribute('hidden', 'hidden');
+	// });
 }
 
-function downloadStuff() {
+function downloadResources() {
 	let resourceSelector = document.getElementById("resourceSelector");
-	Array.from(resourceSelector.options).filter(option => option.selected).forEach(option => chrome.downloads.download({url: option.value}));
-	// _gaq.push(['_trackEvent', 'downloadStuff', 'clicked']);
-	ga('send', 'downloadStuff', 'func', 'clicked');
+	let selectedOptions = Array.from(resourceSelector.options).filter(option => option.selected)
+	ga('send', 'event', {
+		'eventCategory': 'click',
+		'eventAction': 'downloadResources',
+		'eventValue': selectedOptions.length
+	  });
+	selectedOptions.forEach(option => chrome.downloads.download({url: option.value}));
 }
 
 document.addEventListener('DOMContentLoaded', function() {
