@@ -136,7 +136,7 @@ function downloadResources() {
 	let footer = document.getElementById("footer");
 	let button = document.getElementById("downloadResources");
 	let resourceSelector = document.getElementById("resourceSelector");
-	let selectedOptions = Array.from(resourceSelector.options).filter(option => option.selected)
+	let selectedOptions = Array.from(resourceSelector.selectedOptions);
 
 	// hidding the button and showing warning text
 	button.setAttribute('hidden', 'hidden');
@@ -154,6 +154,10 @@ function downloadResources() {
 		button.removeAttribute('hidden');
 		requestFeedback();
 	}, (selectedOptions.length+4)*INTERVAL);
+
+	// chrome.downloads.onDeterminingFilename.addListener(function(item, suggest) {
+	// 	suggest({filename: 'MD/' + item.filename});
+	// });
 
 	// selectedOptions.forEach(option => chrome.downloads.download({url: option.value}));
 	selectedOptions.forEach((option, index) => {
