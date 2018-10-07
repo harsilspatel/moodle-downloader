@@ -1,3 +1,9 @@
+/**
+ * moodleDownloader - a chrome extension for batch downloading Moodle resources 💾
+ * Copyright (c) 2018 Harsil Patel
+ * https://github.com/harsilspatel/MoodleDownloader
+ */
+
 function getFiles() {
 	let resourceContainers = Array.from(document.getElementsByClassName("activityinstance")); // realised this is not beautifulSoup 😆
 	return resourceContainers
@@ -14,17 +20,4 @@ function getFiles() {
 			})))
 }
 
-// function getFolders() {
-// 	var foldersContainers = document.getElementsByClassName("singlebutton");
-// 	for (i = 0; i < foldersContainers.length; i++) {
-// 		var url =
-// 			foldersContainers[i].querySelector("form").action +
-// 			"?id=" +
-// 			foldersContainers[i].querySelectorAll("input")[1].value;
-// 		folders.push(url);
-// 	}
-// 	return folders;
-// }
-
 getFiles();
-// getFolders(); //to-do
