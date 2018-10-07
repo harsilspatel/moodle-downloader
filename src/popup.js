@@ -13,7 +13,7 @@ function main() {
 
 		ga('create', 'UA-119398707-1', 'auto');
 		ga('set', 'checkProtocolTask', null);
-		ga('send', 'pageview', '/popup.html');
+		ga('send', 'pageview');
 
 	// array of titles of resources in lower case
 	let resourceTitle = []
@@ -52,6 +52,31 @@ function main() {
 			console.log(error);
 		}
 	});
+
+	initStorage();
+}
+
+function initStorage() {
+	chrome.storage.sync.get(['downloads', 'alreadyRequested'], result => {
+		let value = result.downloads ? result.downloads : 0;
+		let boolean = result.alreadyRequested ? result.alreadyRequested : false;
+		chrome.storage.sync.set({'downloads': value, 'alreadyRequested': boolean}, function() {
+			console.log('initialised storage variables');
+		});
+	})
+}
+
+function requestFeedback() {
+	chrome.storage.sync.get(['downloads', 'alreadyRequested'], result => {
+		if (result.downloads >= 50 && result.downloads == false) {
+			let footer = document.getElementById("footer");
+			let feedbackDiv = document.createElement("div");
+			let feedback = document.createElement("small");
+			feedback.innerHTML = "Hey there, I've spend 30+ hours learning and developing this extension, could you please rate my efforts? 😬"
+			footer.appendChild(feedbackDiv);
+			feedbackDiv.appendChild(feedback);
+		}
+	});
 }
 
 function filterOptions(resourceTitle) {
@@ -64,6 +89,18 @@ function filterOptions(resourceTitle) {
 		options[index].removeAttribute('hidden') :
 		options[index].setAttribute('hidden', 'hidden');
 	})
+}
+
+function updateDownloads(newDownloads) {
+	chrome.storage.sync.get(['downloads'], result => {
+		let value = result.downloads ? result.downloads : 0;
+		console.log('Value currently is ' + value);
+		let newValue = value + newDownloads;
+		console.log(typeof value);
+		chrome.storage.sync.set({'downloads': newValue}, function() {
+			console.log('Value is set to ' + newValue);
+		});
+	});
 }
 
 function downloadResources() {
@@ -79,6 +116,10 @@ function downloadResources() {
 	warning.style.color = "red";
 	warning.innerHTML = "Please keep this window open until selected resources are not downloaded...";
 	footer.appendChild(warning);
+
+	// updating stats
+	updateDownloads(selectedOptions.length);
+
 
 	// showing the button and removing the text
 	setTimeout(() => {
