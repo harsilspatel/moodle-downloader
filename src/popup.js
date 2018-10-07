@@ -68,13 +68,41 @@ function initStorage() {
 
 function requestFeedback() {
 	chrome.storage.sync.get(['downloads', 'alreadyRequested'], result => {
-		if (result.downloads >= 50 && result.downloads == false) {
-			let footer = document.getElementById("footer");
-			let feedbackDiv = document.createElement("div");
-			let feedback = document.createElement("small");
-			feedback.innerHTML = "Hey there, I've spend 30+ hours learning and developing this extension, could you please rate my efforts? 😬"
-			footer.appendChild(feedbackDiv);
-			feedbackDiv.appendChild(feedback);
+		console.log('inside requestFeedback')
+		if (result.downloads >= 50 && result.alreadyRequested == false) {
+			console.log('attaching ')
+			let nah = document.getElementById("nah");
+			let sure = document.getElementById("sure");
+			let feedbackDiv = document.getElementById("feedbackDiv");
+			let feedbackPrompt = document.getElementById("feedbackPrompt");
+			feedbackDiv.removeAttribute('hidden');
+
+			nah.addEventListener("click", () => {
+				chrome.storage.sync.set({'alreadyRequested': true}, function() {
+					console.log('alreadyRequested is set to ' + true);
+				});
+				nah.setAttribute('hidden', 'hidden');
+				sure.setAttribute('hidden', 'hidden');
+				feedbackPrompt.innerHTML = "No problem, you have a good one! 😄"
+				setTimeout(() => {
+					feedbackDiv.setAttribute('hidden', 'hidden');
+				}, 2000);
+			});
+
+			sure.addEventListener("click", () => {
+				chrome.storage.sync.set({'alreadyRequested': true}, function() {
+					console.log('alreadyRequested is set to ' + true);
+				});
+				nah.setAttribute('hidden', 'hidden');
+				sure.setAttribute('hidden', 'hidden');
+				feedbackPrompt.innerHTML = "Thanks so much 💝"
+				setTimeout(() => {
+					feedbackDiv.setAttribute('hidden', 'hidden');
+					chrome.tabs.create({url: 'https://chrome.google.com/webstore/detail/moodle-downloader/ohhocacnnfaiphiahofcnfakdcfldbnh'})
+				}, 2000);
+
+			});
+
 		}
 	});
 }
@@ -88,7 +116,7 @@ function filterOptions(resourceTitle) {
 		title.includes(query) ?
 		options[index].removeAttribute('hidden') :
 		options[index].setAttribute('hidden', 'hidden');
-	})
+	});
 }
 
 function updateDownloads(newDownloads) {
@@ -120,11 +148,11 @@ function downloadResources() {
 	// updating stats
 	updateDownloads(selectedOptions.length);
 
-
-	// showing the button and removing the text
+	// showing the button and removing the text and requesting for feedback
 	setTimeout(() => {
 		footer.removeChild(warning);
 		button.removeAttribute('hidden');
+		requestFeedback();
 	}, (selectedOptions.length+4)*INTERVAL);
 
 	// selectedOptions.forEach(option => chrome.downloads.download({url: option.value}));
