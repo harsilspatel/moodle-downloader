@@ -155,10 +155,6 @@ function downloadResources() {
 		requestFeedback();
 	}, (selectedOptions.length+4)*INTERVAL);
 
-	// chrome.downloads.onDeterminingFilename.addListener(function(item, suggest) {
-	// 	suggest({filename: 'MD/' + item.filename});
-	// });
-
 	// selectedOptions.forEach(option => chrome.downloads.download({url: option.value}));
 	selectedOptions.forEach((option, index) => {
 		setTimeout(() => {
