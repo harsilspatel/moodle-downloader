@@ -31,7 +31,7 @@ function main() {
 	});
 
 	// executing background.js to populate the select form
-	chrome.tabs.executeScript({file: "background.js"}, result => {
+	chrome.tabs.executeScript({file: "./src/background.js"}, result => {
 		try {
 			let resourceSelector = document.getElementById("resourceSelector");
 			let resources = result[0];
