@@ -17,6 +17,7 @@ function main() {
 
 	// array of titles of resources in lower case
 	let resourceTitle = []
+	let resourcesList = []
 
 	// downloadResources on button press
 	let button = document.getElementById("downloadResources");
@@ -35,6 +36,8 @@ function main() {
 		try {
 			let resourceSelector = document.getElementById("resourceSelector");
 			let resources = result[0];
+			resourcesList = [...resources];
+			console.log(result);
 			resources.forEach(resource => {
 				let resourceOption = document.createElement("option");
 
@@ -46,14 +49,20 @@ function main() {
 				resourceOption.value = resource.url;
 				resourceOption.title = resource.name;
 				resourceOption.innerHTML = resource.name;
+				resourceOption.course = resource.course;
+				resourceOption.section = resource.section;
 				resourceSelector.appendChild(resourceOption);
 			});
 		} catch(error) {
 			console.log(error);
 		}
 	});
-
 	initStorage();
+	chrome.downloads.onDeterminingFilename.addListener((downloadItem, suggest) => (
+		item = resourcesList.filter(r=>r.url==downloadItem.url)[0],
+		console.log(downloadItem),
+		console.log(resourcesList),
+		suggest({filename: item.course + '/' + item.section + '/' + downloadItem.filename})))
 }
 
 function initStorage() {
