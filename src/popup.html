@@ -35,7 +35,13 @@
           </select>
 					<br>
 					<div style="padding-left: 1%;" id=footer>
-						<button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored" id="downloadResources">Download</button>
+						<div style="zoom: .9">
+							<label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="organize">
+								<input type="checkbox" id="organize" class="mdl-checkbox__input" checked>
+								<span style="font-size:75%;" class="mdl-checkbox__label">Organize into folder (experimental)</span>
+							</label>
+							<button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored" id="downloadResources">Download</button>
+						</div>
 						<div hidden='hidden' id=feedbackDiv>
 								<br>
 								<small id=feedbackPrompt>You just downloaded 50th file using this tool! 🎉 <br/> <br/> I have spent more than <b>30 hours</b> to learn & develop this extension, could you please rate my efforts? 😬</small>
