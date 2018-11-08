@@ -17,7 +17,6 @@ function main() {
 
 	// array of titles of resources in lower case
 	let resourceTitle = []
-	let resourcesList = []
 
 	// downloadResources on button press
 	let button = document.getElementById("downloadResources");
@@ -58,18 +57,13 @@ function main() {
 		}
 	});
 	initStorage();
-	chrome.downloads.onDeterminingFilename.addListener((downloadItem, suggest) => (
-		item = resourcesList.filter(r=>r.url==downloadItem.url)[0],
-		console.log(downloadItem),
-		console.log(resourcesList),
-		suggest({filename: item.course + '/' + item.section + '/' + downloadItem.filename})))
 }
 
 function initStorage() {
 	chrome.storage.sync.get(['downloads', 'alreadyRequested'], result => {
-		let value = result.downloads ? result.downloads : 0;
-		let boolean = result.alreadyRequested ? result.alreadyRequested : false;
-		chrome.storage.sync.set({'downloads': value, 'alreadyRequested': boolean}, function() {
+		let downloads = result.downloads ? result.downloads : 0;
+		let alreadyRequested = result.alreadyRequested ? result.alreadyRequested : false;
+		chrome.storage.sync.set({'downloads': downloads, 'alreadyRequested': alreadyRequested}, function() {
 			console.log('initialised storage variables');
 		});
 	})
@@ -140,12 +134,27 @@ function updateDownloads(newDownloads) {
 	});
 }
 
+function suggestFilename(downloadItem, suggest) {
+		item = resourcesList.filter(r => r.url==downloadItem.url)[0],
+		console.log(downloadItem),
+		console.log(resourcesList),
+		suggest({filename: item.course + '/' + item.section + '/' + downloadItem.filename})
+}
+
 function downloadResources() {
 	const INTERVAL = 500;
 	let footer = document.getElementById("footer");
 	let button = document.getElementById("downloadResources");
 	let resourceSelector = document.getElementById("resourceSelector");
 	let selectedOptions = Array.from(resourceSelector.selectedOptions);
+	let organizeChecked = document.getElementById('organize').checked;
+	let hasDownloadsListener = chrome.downloads.onDeterminingFilename.hasListener(suggestFilename);
+
+	// add/remove listener to organize files
+	if (organizeChecked && !hasDownloadsListener)
+		chrome.downloads.onDeterminingFilename.addListener(suggestFilename);
+	else if (!organizeChecked && hasDownloadsListener)
+		chrome.downloads.onDeterminingFilename.removeListener(suggestFilename);
 
 	// hidding the button and showing warning text
 	button.setAttribute('hidden', 'hidden');
@@ -180,4 +189,5 @@ function downloadResources() {
 
 document.addEventListener('DOMContentLoaded', () => {
 	main();
+	var resourcesList = []
 });
