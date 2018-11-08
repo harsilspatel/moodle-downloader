@@ -18,12 +18,18 @@ function getFilesUnderSection() {
 }
 
 function getFilesUnderResources() {
-	return Array.from(document.getElementsByClassName('cell c1')) // to get files under Resources tab
-			.filter(resource => resource.getElementsByTagName('img')[0]['alt'] == "File")
-			.map(resource => ({
+	return Array.from(document.getElementsByTagName('tr')) // to get files under Resources tab
+			.filter(resource => resource.getElementsByTagName('img').length != 0)
+			// .filter(resource => resource.getElementsByTagName('img')[0]['alt'] == "File")
+			.map(resource => (resource = {
 				name: resource.getElementsByTagName('a')[0].innerText.trim(),
-				url: resource.getElementsByTagName('a')[0].href + "&redirect=1"
-			}));
+				url: resource.getElementsByTagName('a')[0].href + "&redirect=1",
+				type: resource.getElementsByTagName('img')[0]['alt'],
+				section: resource.getElementsByTagName('td')[0].innerText.trim()}))
+			.map((resource, index, array) => {
+				resource.section = (resource.section ? resource.section : array[index-1].section);
+				return resource})
+			.filter(resource => resource.type == 'File')
 }
 
 function getFiles() {
