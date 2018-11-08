@@ -15,9 +15,6 @@ function main() {
 		ga('set', 'checkProtocolTask', null);
 		ga('send', 'pageview');
 
-	// array of titles of resources in lower case
-	let resourceTitle = []
-
 	// downloadResources on button press
 	let button = document.getElementById("downloadResources");
 	button.addEventListener("click", () => {
@@ -27,7 +24,7 @@ function main() {
 	// filter resources on input
 	let searchField = document.getElementById("search");
 	searchField.addEventListener("input", () => {
-		filterOptions(resourceTitle)
+		filterOptions()
 	});
 
 	// executing background.js to populate the select form
@@ -39,9 +36,6 @@ function main() {
 			console.log(result);
 			resources.forEach(resource => {
 				let resourceOption = document.createElement("option");
-
-				// saving titles in lower case
-				resourceTitle.push(resource.name.toLowerCase())
 
 				// creating option element such that the text will be
 				// the resource name and the option value its url.
@@ -110,13 +104,13 @@ function requestFeedback() {
 	});
 }
 
-function filterOptions(resourceTitle) {
+function filterOptions() {
 	let searchField = document.getElementById("search");
 	let query = searchField.value.toLowerCase();
 	let options = document.getElementById("resourceSelector").options;
 
-	resourceTitle.forEach((title, index) => {
-		title.includes(query) ?
+	resourcesList.forEach((resource, index) => {
+		resource.name.includes(query) ?
 		options[index].removeAttribute('hidden') :
 		options[index].setAttribute('hidden', 'hidden');
 	});
