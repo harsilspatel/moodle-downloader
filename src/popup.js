@@ -16,13 +16,13 @@ function main() {
 		ga('send', 'pageview');
 
 	// downloadResources on button press
-	let button = document.getElementById("downloadResources");
+	const button = document.getElementById("downloadResources");
 	button.addEventListener("click", () => {
 		downloadResources()
 	});
 
 	// filter resources on input
-	let searchField = document.getElementById("search");
+	const searchField = document.getElementById("search");
 	searchField.addEventListener("input", () => {
 		filterOptions()
 	});
@@ -30,12 +30,12 @@ function main() {
 	// executing background.js to populate the select form
 	chrome.tabs.executeScript({file: "./src/background.js"}, result => {
 		try {
-			let resourceSelector = document.getElementById("resourceSelector");
-			let resources = result[0];
+			const resourceSelector = document.getElementById("resourceSelector");
+			const resources = result[0];
 			resourcesList = [...resources];
 			console.log(result);
 			resources.forEach(resource => {
-				let resourceOption = document.createElement("option");
+				const resourceOption = document.createElement("option");
 
 				// creating option element such that the text will be
 				// the resource name and the option value its url.
@@ -55,8 +55,8 @@ function main() {
 
 function initStorage() {
 	chrome.storage.sync.get(['downloads', 'alreadyRequested'], result => {
-		let downloads = result.downloads ? result.downloads : 0;
-		let alreadyRequested = result.alreadyRequested ? result.alreadyRequested : false;
+		const downloads = result.downloads ? result.downloads : 0;
+		const alreadyRequested = result.alreadyRequested ? result.alreadyRequested : false;
 		chrome.storage.sync.set({'downloads': downloads, 'alreadyRequested': alreadyRequested}, function() {
 			console.log('initialised storage variables');
 		});
@@ -68,10 +68,10 @@ function requestFeedback() {
 		console.log('inside requestFeedback')
 		if (result.downloads >= 50 && result.alreadyRequested == false) {
 			console.log('attaching ')
-			let nah = document.getElementById("nah");
-			let sure = document.getElementById("sure");
-			let feedbackDiv = document.getElementById("feedbackDiv");
-			let feedbackPrompt = document.getElementById("feedbackPrompt");
+			const nah = document.getElementById("nah");
+			const sure = document.getElementById("sure");
+			const feedbackDiv = document.getElementById("feedbackDiv");
+			const feedbackPrompt = document.getElementById("feedbackPrompt");
 			feedbackDiv.removeAttribute('hidden');
 
 			nah.addEventListener("click", () => {
@@ -105,12 +105,13 @@ function requestFeedback() {
 }
 
 function filterOptions() {
-	let searchField = document.getElementById("search");
-	let query = searchField.value.toLowerCase();
-	let options = document.getElementById("resourceSelector").options;
+	const searchField = document.getElementById("search");
+	const query = searchField.value.toLowerCase();
+	const regex = new RegExp(query);
+	const options = document.getElementById("resourceSelector").options;
 
 	resourcesList.forEach((resource, index) => {
-		resource.name.includes(query) ?
+		resource.name.match(regex) ?
 		options[index].removeAttribute('hidden') :
 		options[index].setAttribute('hidden', 'hidden');
 	});
@@ -118,9 +119,9 @@ function filterOptions() {
 
 function updateDownloads(newDownloads) {
 	chrome.storage.sync.get(['downloads'], result => {
-		let value = result.downloads ? result.downloads : 0;
+		const value = result.downloads ? result.downloads : 0;
 		console.log('Value currently is ' + value);
-		let newValue = value + newDownloads;
+		const newValue = value + newDownloads;
 		console.log(typeof value);
 		chrome.storage.sync.set({'downloads': newValue}, function() {
 			console.log('Value is set to ' + newValue);
@@ -137,12 +138,12 @@ function suggestFilename(downloadItem, suggest) {
 
 function downloadResources() {
 	const INTERVAL = 500;
-	let footer = document.getElementById("footer");
-	let button = document.getElementById("downloadResources");
-	let resourceSelector = document.getElementById("resourceSelector");
-	let selectedOptions = Array.from(resourceSelector.selectedOptions);
-	let organizeChecked = document.getElementById('organize').checked;
-	let hasDownloadsListener = chrome.downloads.onDeterminingFilename.hasListener(suggestFilename);
+	const footer = document.getElementById("footer");
+	const button = document.getElementById("downloadResources");
+	const resourceSelector = document.getElementById("resourceSelector");
+	const selectedOptions = Array.from(resourceSelector.selectedOptions);
+	const organizeChecked = document.getElementById('organize').checked;
+	const hasDownloadsListener = chrome.downloads.onDeterminingFilename.hasListener(suggestFilename);
 
 	// add/remove listener to organize files
 	if (organizeChecked && !hasDownloadsListener)
@@ -152,7 +153,7 @@ function downloadResources() {
 
 	// hidding the button and showing warning text
 	button.setAttribute('hidden', 'hidden');
-	let warning = document.createElement("small");
+	const warning = document.createElement("small");
 	warning.style.color = "red";
 	warning.innerHTML = "Please keep this window open until selected resources are not downloaded...";
 	footer.appendChild(warning);
