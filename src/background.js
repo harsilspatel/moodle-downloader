@@ -7,9 +7,7 @@
 function getFilesUnderSection() {
 	return Array.from(document.getElementsByClassName('content'))
 		.map(content =>
-			Array.from(content.getElementsByClassName("activityinstance"))
-				.filter(resource => (	// filtering out just the files. Noob filtering going on here 😝
-					resource.getElementsByClassName("instancename")[0].innerText.slice(-4) == "File"))
+			Array.from(content.getElementsByClassName("activity resource modtype_resource "))
 				.map(resource => ({
 					name: resource.getElementsByClassName("instancename")[0].innerText.slice(0, -4).trim().toLowerCase(),
 					url: resource.getElementsByTagName("a")[0].href + "&redirect=1",
@@ -20,7 +18,6 @@ function getFilesUnderSection() {
 function getFilesUnderResources() {
 	return Array.from(document.getElementsByTagName('tr')) // to get files under Resources tab
 			.filter(resource => resource.getElementsByTagName('img').length != 0)
-			// .filter(resource => resource.getElementsByTagName('img')[0]['alt'] == "File")
 			.map(resource => (resource = {
 				name: resource.getElementsByTagName('a')[0].innerText.trim().toLowerCase(),
 				url: resource.getElementsByTagName('a')[0].href + "&redirect=1",
@@ -33,7 +30,13 @@ function getFilesUnderResources() {
 }
 
 function getFiles() {
-	let courseName = document.getElementsByTagName('h1')[0].innerText;
+	let courseName;
+	try {
+		courseName = document.getElementsByTagName('h1')[0].innerText;
+	} catch {
+		courseName = document.getElementsByClassName('breadcrumb-item')[2].firstElementChild.title;
+	}
+
 	let filesUnderSection = getFilesUnderSection()
 	let filesUnderResources = getFilesUnderResources();
 	let allFiles = filesUnderSection.concat(filesUnderResources);
