@@ -129,15 +129,19 @@ function updateDownloads(newDownloads) {
 	});
 }
 
+let organizeChecked = false;
+
 function suggestFilename(downloadItem, suggest) {
-		item = resourcesList.filter(r => r.url==downloadItem.url)[0],
-		console.log(downloadItem),
-		console.log(resourcesList),
-		suggest({filename:
-			item.course.replace("/", "-") + '/' +
-			item.section.replace("/", "-") + '/' +
-			downloadItem.filename
-		})
+	if (!organizeChecked) {
+		suggest();
+		return;
+	}
+	const item = resourcesList.filter(r => r.url==downloadItem.url)[0];
+	suggest({filename:
+		item.course.replace("/", "-") + '/' +
+		item.section.replace("/", "-") + '/' +
+		downloadItem.filename
+	});
 }
 
 function downloadResources() {
@@ -146,14 +150,12 @@ function downloadResources() {
 	const button = document.getElementById("downloadResources");
 	const resourceSelector = document.getElementById("resourceSelector");
 	const selectedOptions = Array.from(resourceSelector.selectedOptions);
-	const organizeChecked = document.getElementById('organize').checked;
+	organizeChecked = document.getElementById('organize').checked;
 	const hasDownloadsListener = chrome.downloads.onDeterminingFilename.hasListener(suggestFilename);
 
-	// add/remove listener to organize files
-	if (organizeChecked && !hasDownloadsListener)
+	// add listener to organize files
+	if (!hasDownloadsListener)
 		chrome.downloads.onDeterminingFilename.addListener(suggestFilename);
-	else if (!organizeChecked && hasDownloadsListener)
-		chrome.downloads.onDeterminingFilename.removeListener(suggestFilename);
 
 	// hidding the button and showing warning text
 	button.setAttribute('hidden', 'hidden');
