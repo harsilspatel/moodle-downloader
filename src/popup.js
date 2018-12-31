@@ -133,7 +133,11 @@ function suggestFilename(downloadItem, suggest) {
 		item = resourcesList.filter(r => r.url==downloadItem.url)[0],
 		console.log(downloadItem),
 		console.log(resourcesList),
-		suggest({filename: item.course + '/' + item.section + '/' + downloadItem.filename})
+		suggest({filename:
+			item.course.replace("/", "-") + '/' +
+			item.section.replace("/", "-") + '/' +
+			downloadItem.filename
+		})
 }
 
 function downloadResources() {
