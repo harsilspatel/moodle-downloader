@@ -14,9 +14,9 @@ function getFilesUnderSection() {
 		.map(content =>
 			Array.from(content.getElementsByClassName("activity resource modtype_resource "))
 				.map(resource => ({
-					name: cleanupName(resource.getElementsByClassName("instancename")[0].innerText),
+					name: cleanupName(resource.getElementsByClassName("instancename")[0].textContent),
 					url: resource.getElementsByTagName("a")[0].href + "&redirect=1",
-					section: content.getElementsByTagName("h3")[0].innerText.trim()})))
+					section: content.getElementsByTagName("h3")[0].textContent.trim()})))
 		.reduce((x, y) => x.concat(y), []);
 }
 
@@ -24,10 +24,10 @@ function getFilesUnderResources() {
 	return Array.from(document.getElementsByTagName('tr')) // to get files under Resources tab
 			.filter(resource => resource.getElementsByTagName('img').length != 0)
 			.map(resource => (resource = {
-				name: resource.getElementsByTagName('a')[0].innerText.trim().toLowerCase(),
+				name: resource.getElementsByTagName('a')[0].textContent.trim().toLowerCase(),
 				url: resource.getElementsByTagName('a')[0].href + "&redirect=1",
 				type: resource.getElementsByTagName('img')[0]['alt'],
-				section: resource.getElementsByTagName('td')[0].innerText.trim()}))
+				section: resource.getElementsByTagName('td')[0].textContent.trim()}))
 			.map((resource, index, array) => {
 				resource.section = (resource.section ? resource.section : array[index-1].section);
 				return resource})
@@ -37,7 +37,7 @@ function getFilesUnderResources() {
 function getFiles() {
 	let courseName;
 	try {
-		courseName = document.getElementsByTagName('h1')[0].innerText;
+		courseName = document.getElementsByTagName('h1')[0].textContent;
 	} catch {
 		courseName = document.getElementsByClassName('breadcrumb-item')[2].firstElementChild.title;
 	}
