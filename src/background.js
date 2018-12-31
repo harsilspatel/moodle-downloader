@@ -6,7 +6,7 @@
 
 function cleanupName(name) {
 	let cleanedUpName = name.slice(-5) == ' File' ? name.slice(0, -5) : name;
-	return cleanedUpName.trim().toLowerCase();
+	return cleanedUpName.trim();
 }
 
 function getFilesUnderSection() {
@@ -24,7 +24,7 @@ function getFilesUnderResources() {
 	return Array.from(document.getElementsByTagName('tr')) // to get files under Resources tab
 			.filter(resource => resource.getElementsByTagName('img').length != 0)
 			.map(resource => (resource = {
-				name: resource.getElementsByTagName('a')[0].textContent.trim().toLowerCase(),
+				name: resource.getElementsByTagName('a')[0].textContent.trim(),
 				url: resource.getElementsByTagName('a')[0].href + "&redirect=1",
 				type: resource.getElementsByTagName('img')[0]['alt'],
 				section: resource.getElementsByTagName('td')[0].textContent.trim()}))

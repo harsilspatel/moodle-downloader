@@ -107,7 +107,7 @@ function requestFeedback() {
 function filterOptions() {
 	const searchField = document.getElementById("search");
 	const query = searchField.value.toLowerCase();
-	const regex = new RegExp(query);
+	const regex = new RegExp(query, "i");
 	const options = document.getElementById("resourceSelector").options;
 
 	resourcesList.forEach((resource, index) => {
