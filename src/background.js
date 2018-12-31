@@ -4,17 +4,12 @@
  * https://github.com/harsilspatel/MoodleDownloader
  */
 
-function cleanupName(name) {
-	let cleanedUpName = name.slice(-5) == ' File' ? name.slice(0, -5) : name;
-	return cleanedUpName.trim();
-}
-
 function getFilesUnderSection() {
 	return Array.from(document.getElementsByClassName('content'))
 		.map(content =>
 			Array.from(content.getElementsByClassName("activity resource modtype_resource "))
 				.map(resource => ({
-					name: cleanupName(resource.getElementsByClassName("instancename")[0].textContent),
+					name: resource.getElementsByClassName("instancename")[0].firstChild.textContent.trim(),
 					url: resource.getElementsByTagName("a")[0].href + "&redirect=1",
 					section: content.getElementsByTagName("h3")[0].textContent.trim()})))
 		.reduce((x, y) => x.concat(y), []);
