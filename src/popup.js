@@ -130,18 +130,27 @@ function updateDownloads(newDownloads) {
 }
 
 let organizeChecked = false;
+let replaceFilename = false;
 
 function suggestFilename(downloadItem, suggest) {
-	if (!organizeChecked) {
-		suggest();
-		return;
-	}
 	const item = resourcesList.filter(r => r.url==downloadItem.url)[0];
-	suggest({filename:
-		item.course.replace("/", "-") + '/' +
-		item.section.replace("/", "-") + '/' +
-		downloadItem.filename
-	});
+	let filename = downloadItem.filename;
+
+	if (replaceFilename) {
+		const lastDot = filename.lastIndexOf(".");
+		const extension = lastDot === -1 ? "" : filename.slice(lastDot);
+		filename = item.name + extension;
+	}
+
+	if (organizeChecked) {
+		suggest({filename:
+			item.course.replace("/", "-") + '/' +
+			item.section.replace("/", "-") + '/' +
+			filename
+		});
+	} else {
+		suggest(filename);
+	}
 }
 
 function downloadResources() {
@@ -151,6 +160,7 @@ function downloadResources() {
 	const resourceSelector = document.getElementById("resourceSelector");
 	const selectedOptions = Array.from(resourceSelector.selectedOptions);
 	organizeChecked = document.getElementById('organize').checked;
+	replaceFilename = document.getElementById('replaceFilename').checked;
 	const hasDownloadsListener = chrome.downloads.onDeterminingFilename.hasListener(suggestFilename);
 
 	// add listener to organize files
