@@ -34,16 +34,14 @@ function main() {
 			const resources = result[0];
 			resourcesList = [...resources];
 			console.log(result);
-			resources.forEach(resource => {
+			resources.forEach((resource, index) => {
 				const resourceOption = document.createElement("option");
 
 				// creating option element such that the text will be
-				// the resource name and the option value its url.
-				resourceOption.value = resource.url;
+				// the resource name and the option value its index in the array.
+				resourceOption.value = index.toString();
 				resourceOption.title = resource.name;
 				resourceOption.innerHTML = resource.name;
-				resourceOption.course = resource.course;
-				resourceOption.section = resource.section;
 				resourceSelector.appendChild(resourceOption);
 			});
 		} catch(error) {
@@ -184,10 +182,11 @@ function downloadResources() {
 		requestFeedback();
 	}, (selectedOptions.length+4)*INTERVAL);
 
-	// selectedOptions.forEach(option => chrome.downloads.download({url: option.value}));
 	selectedOptions.forEach((option, index) => {
+		const resourceIndex = Number(option.value);
+		const resource = resourcesList[resourceIndex];
 		setTimeout(() => {
-			chrome.downloads.download({url: option.value})
+			chrome.downloads.download({url: resource.url})
 		}, index*INTERVAL);
 	});
 
