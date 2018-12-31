@@ -10,7 +10,9 @@ function getFilesUnderSection() {
 			Array.from(content.getElementsByClassName("activity resource modtype_resource "))
 				.map(resource => ({
 					name: resource.getElementsByClassName("instancename")[0].firstChild.textContent.trim(),
-					url: resource.getElementsByTagName("a")[0].href + "&redirect=1",
+					downloadOptions: {
+						url: resource.getElementsByTagName("a")[0].href + "&redirect=1"
+					},
 					section: content.getElementsByTagName("h3")[0].textContent.trim()})))
 		.reduce((x, y) => x.concat(y), []);
 }
@@ -20,7 +22,9 @@ function getFilesUnderResources() {
 			.filter(resource => resource.getElementsByTagName('img').length != 0)
 			.map(resource => (resource = {
 				name: resource.getElementsByTagName('a')[0].textContent.trim(),
-				url: resource.getElementsByTagName('a')[0].href + "&redirect=1",
+				downloadOptions: {
+					url: resource.getElementsByTagName('a')[0].href + "&redirect=1"
+				},
 				type: resource.getElementsByTagName('img')[0]['alt'],
 				section: resource.getElementsByTagName('td')[0].textContent.trim()}))
 			.map((resource, index, array) => {

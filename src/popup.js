@@ -131,7 +131,7 @@ let organizeChecked = false;
 let replaceFilename = false;
 
 function suggestFilename(downloadItem, suggest) {
-	const item = resourcesList.filter(r => r.url==downloadItem.url)[0];
+	const item = resourcesList.filter(r => r.downloadOptions.url==downloadItem.url)[0];
 	let filename = downloadItem.filename;
 
 	if (replaceFilename) {
@@ -186,7 +186,7 @@ function downloadResources() {
 		const resourceIndex = Number(option.value);
 		const resource = resourcesList[resourceIndex];
 		setTimeout(() => {
-			chrome.downloads.download({url: resource.url})
+			chrome.downloads.download(resource.downloadOptions)
 		}, index*INTERVAL);
 	});
 
