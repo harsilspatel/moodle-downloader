@@ -53,7 +53,7 @@ function getFilesUnderSection() {
 			if (!sectionEl)
 				return [];
 			const section = sectionEl.textContent.trim();
-			return Array.from(content.querySelectorAll("activity resource, activity folder"))
+			return Array.from(content.querySelectorAll(".activity.resource, .activity.folder"))
 				.map(activity => ({
 					name: getActivityName(activity),
 					downloadOptions: getDownloadOptions(activity.getElementsByTagName("a")[0].href),
