@@ -6,8 +6,9 @@
 
 // The session key should normally be accessible through window.M.cfg.sesskey,
 // but getting the window object is hard.
-// Instead, we can grab the session key from the logout button:
-const sesskey = (
+// Instead, we can grab the session key from the logout button.
+// Note that var is used here as this script can be executed multiple times.
+var sesskey = (
 	new URL(document.querySelector("a[href*='login/logout.php']").href)
 ).searchParams.get("sesskey");
 
