@@ -160,7 +160,7 @@ function suggestFilename(downloadItem, suggest) {
 			filename
 		});
 	} else {
-		suggest(filename);
+		suggest({filename});
 	}
 }
 
