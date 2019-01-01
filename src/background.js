@@ -80,7 +80,10 @@ function getFilesUnderResources() {
 				type: resource.getElementsByTagName('img')[0]['alt'],
 				section: resource.getElementsByTagName('td')[0].textContent.trim()}))
 			.map((resource, index, array) => {
-				resource.section = (resource.section ? resource.section : array[index-1].section);
+				resource.section =
+					resource.section ||
+					(array[index-1] && array[index-1].section) ||
+					"";
 				return resource})
 			.filter(resource => SUPPORTED_FILES.has(resource.type))
 }

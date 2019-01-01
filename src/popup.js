@@ -156,7 +156,7 @@ function suggestFilename(downloadItem, suggest) {
 	if (organizeChecked) {
 		suggest({filename:
 			sanitiseFilename(item.course) + '/' +
-			sanitiseFilename(item.section) + '/' +
+			(item.section && sanitiseFilename(item.section) + '/') +
 			filename
 		});
 	} else {
