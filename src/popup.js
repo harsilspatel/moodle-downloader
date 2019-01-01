@@ -134,6 +134,12 @@ function suggestFilename(downloadItem, suggest) {
 	const item = resourcesList.filter(r => r.downloadOptions.url==downloadItem.url)[0];
 	let filename = downloadItem.filename;
 
+	if (item.type === "URL") {
+		// The filename should be some arbitrary Blob UUID.
+		// We should always replace it with the item's name.
+		filename = item.name + ".url";
+	}
+
 	if (replaceFilename) {
 		const lastDot = filename.lastIndexOf(".");
 		const extension = lastDot === -1 ? "" : filename.slice(lastDot);
@@ -185,9 +191,26 @@ function downloadResources() {
 	selectedOptions.forEach((option, index) => {
 		const resourceIndex = Number(option.value);
 		const resource = resourcesList[resourceIndex];
-		setTimeout(() => {
-			chrome.downloads.download(resource.downloadOptions)
-		}, index*INTERVAL);
+		if (resource.type === "URL") {
+			// We need to get the URL of the redirect and create a blob for it.
+			fetch(resource.downloadOptions.url, {method: "HEAD"}).then(req => {
+				const blob = new Blob([
+					`[InternetShortcut]\nURL=${req.url}\n`
+				], {type: "text/plain"});
+				const blobUrl = URL.createObjectURL(blob);
+				const newOptions = {
+					url: blobUrl
+				};
+				resource.downloadOptions = newOptions;
+				setTimeout(() => {
+					chrome.downloads.download(newOptions)
+				}, index*INTERVAL);
+			});
+		} else {
+			setTimeout(() => {
+				chrome.downloads.download(resource.downloadOptions)
+			}, index*INTERVAL);
+		}
 	});
 
 	ga('send', 'event', {

@@ -14,7 +14,9 @@ var sesskey = (
 
 function getDownloadOptions(url) {
 	if (!url.includes("folder")) {
-		// Resources and other unsupported types.
+		// Resources, URLs and other unsupported types.
+		// URLs need to be handled in popup.js, as we can't send functions
+		// between background and popup.
 		return {
 			url: url + "&redirect=1"
 		};
@@ -42,6 +44,8 @@ function getDownloadOptions(url) {
 	};
 }
 
+var SUPPORTED_FILES = new Set(["File", "Folder", "URL"]);
+
 function getFilesUnderSection() {
 	return Array.from(document.getElementsByClassName('content'))
 		.map(content => {
@@ -49,16 +53,18 @@ function getFilesUnderSection() {
 			if (!sectionEl)
 				return [];
 			const section = sectionEl.textContent.trim();
-			return Array.from(content.querySelectorAll(".activity.resource, .activity.folder"))
-				.map(activity => {
-					const instanceName = activity.getElementsByClassName("instancename")[0];
-					return {
-						name: instanceName.firstChild.textContent.trim(),
-						downloadOptions: getDownloadOptions(activity.getElementsByTagName("a")[0].href),
-						type: instanceName.lastChild.textContent.trim(),
-						section: section
-					};
-				});
+			return Array.from(content.getElementsByClassName("activity"))
+				.map(activity => ({
+					instanceName: activity.getElementsByClassName("instancename")[0],
+					activity
+				})).filter(({ instanceName }) =>
+					instanceName !== undefined
+				).map(({ activity, instanceName }) => ({
+					name: instanceName.firstChild.textContent.trim(),
+					downloadOptions: getDownloadOptions(activity.getElementsByTagName("a")[0].href),
+					type: instanceName.lastChild.textContent.trim(),
+					section: section
+				})).filter(activity => SUPPORTED_FILES.has(activity.type));
 		}).reduce((x, y) => x.concat(y), []);
 }
 
@@ -73,7 +79,7 @@ function getFilesUnderResources() {
 			.map((resource, index, array) => {
 				resource.section = (resource.section ? resource.section : array[index-1].section);
 				return resource})
-			.filter(resource => resource.type === 'File' || resource.type === 'Folder')
+			.filter(resource => SUPPORTED_FILES.has(resource.type))
 }
 
 function getFiles() {
