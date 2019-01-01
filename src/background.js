@@ -68,7 +68,11 @@ function getFilesUnderSection() {
 }
 
 function getFilesUnderResources() {
-	return Array.from(document.getElementsByTagName('tr')) // to get files under Resources tab
+	const tableBody = document.querySelector("div[role='main'] > table.generaltable.mod_index > tbody");
+	if (tableBody === null) {
+		return [];
+	}
+	return Array.from(tableBody.children) // to get files under Resources tab
 			.filter(resource => resource.getElementsByTagName('img').length != 0)
 			.map(resource => (resource = {
 				name: resource.getElementsByTagName('a')[0].textContent.trim(),
