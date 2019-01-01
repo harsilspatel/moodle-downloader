@@ -130,26 +130,31 @@ function updateDownloads(newDownloads) {
 let organizeChecked = false;
 let replaceFilename = false;
 
+function sanitiseFilename(filename) {
+	return filename.replace(/[\\/:*?"<>|]/g, "-");
+}
+
 function suggestFilename(downloadItem, suggest) {
 	const item = resourcesList.filter(r => r.downloadOptions.url==downloadItem.url)[0];
 	let filename = downloadItem.filename;
+	const sanitisedItemName = sanitiseFilename(item.name);
 
 	if (item.type === "URL") {
 		// The filename should be some arbitrary Blob UUID.
 		// We should always replace it with the item's name.
-		filename = item.name + ".url";
+		filename = sanitisedItemName + ".url";
 	}
 
 	if (replaceFilename) {
 		const lastDot = filename.lastIndexOf(".");
 		const extension = lastDot === -1 ? "" : filename.slice(lastDot);
-		filename = item.name + extension;
+		filename = sanitisedItemName + extension;
 	}
 
 	if (organizeChecked) {
 		suggest({filename:
-			item.course.replace("/", "-") + '/' +
-			item.section.replace("/", "-") + '/' +
+			sanitiseFilename(item.course) + '/' +
+			sanitiseFilename(item.section) + '/' +
 			filename
 		});
 	} else {
