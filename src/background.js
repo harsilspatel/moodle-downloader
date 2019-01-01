@@ -89,12 +89,7 @@ function getFilesUnderResources() {
 }
 
 function getFiles() {
-	let courseName;
-	try {
-		courseName = document.getElementsByTagName('h1')[0].textContent;
-	} catch {
-		courseName = document.getElementsByClassName('breadcrumb-item')[2].firstElementChild.title;
-	}
+	const courseName = document.querySelector("header#page-header .header-title").textContent.trim();
 
 	let filesUnderSection = getFilesUnderSection()
 	let filesUnderResources = getFilesUnderResources();
