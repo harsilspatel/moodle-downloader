@@ -42,10 +42,6 @@ function getDownloadOptions(url) {
 	};
 }
 
-function getActivityName(activity) {
-	return activity.getElementsByClassName("instancename")[0].firstChild.textContent.trim();
-}
-
 function getFilesUnderSection() {
 	return Array.from(document.getElementsByClassName('content'))
 		.map(content => {
@@ -54,10 +50,15 @@ function getFilesUnderSection() {
 				return [];
 			const section = sectionEl.textContent.trim();
 			return Array.from(content.querySelectorAll(".activity.resource, .activity.folder"))
-				.map(activity => ({
-					name: getActivityName(activity),
-					downloadOptions: getDownloadOptions(activity.getElementsByTagName("a")[0].href),
-					section: section}));
+				.map(activity => {
+					const instanceName = activity.getElementsByClassName("instancename")[0];
+					return {
+						name: instanceName.firstChild.textContent.trim(),
+						downloadOptions: getDownloadOptions(activity.getElementsByTagName("a")[0].href),
+						type: instanceName.lastChild.textContent.trim(),
+						section: section
+					};
+				});
 		}).reduce((x, y) => x.concat(y), []);
 }
 
