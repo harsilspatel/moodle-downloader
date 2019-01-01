@@ -143,6 +143,8 @@ function suggestFilename(downloadItem, suggest) {
 		// The filename should be some arbitrary Blob UUID.
 		// We should always replace it with the item's name.
 		filename = sanitisedItemName + ".url";
+	} else if (item.type === "Page") {
+		filename = sanitisedItemName + ".html";
 	}
 
 	if (replaceFilename) {
@@ -202,6 +204,27 @@ function downloadResources() {
 				const blob = new Blob([
 					`[InternetShortcut]\nURL=${req.url}\n`
 				], {type: "text/plain"});
+				const blobUrl = URL.createObjectURL(blob);
+				const newOptions = {
+					url: blobUrl
+				};
+				resource.downloadOptions = newOptions;
+				setTimeout(() => {
+					chrome.downloads.download(newOptions)
+				}, index*INTERVAL);
+			});
+		} else if (resource.type === "Page") {
+			fetch(resource.downloadOptions.url).then(req => {
+				return req.text();
+			}).then(text => {
+				// We want to grab "[role='main']" from the text and save that
+				// as an HTML file.
+				const parser = new DOMParser();
+				const doc = parser.parseFromString(text, "text/html");
+				const toSave = doc.querySelector("[role='main']").outerHTML;
+				const blob = new Blob([
+					toSave
+				], {type: "text/html"});
 				const blobUrl = URL.createObjectURL(blob);
 				const newOptions = {
 					url: blobUrl

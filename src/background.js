@@ -14,9 +14,8 @@ var sesskey = (
 
 function getDownloadOptions(url) {
 	if (!url.includes("folder")) {
-		// Resources, URLs and other unsupported types.
-		// URLs need to be handled in popup.js, as we can't send functions
-		// between background and popup.
+		// Resources, URLs, Pages.
+		// URLs and Pages need to be handled in popup.js.
 		return {
 			url: url + "&redirect=1"
 		};
@@ -44,7 +43,7 @@ function getDownloadOptions(url) {
 	};
 }
 
-var SUPPORTED_FILES = new Set(["File", "Folder", "URL"]);
+var SUPPORTED_FILES = new Set(["File", "Folder", "URL", "Page"]);
 
 function getFilesUnderSection() {
 	return Array.from(document.getElementsByClassName('content'))
