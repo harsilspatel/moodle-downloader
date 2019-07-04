@@ -13,6 +13,7 @@ function getFilesUnderSection() {
 	return Array.from(document.getElementsByClassName('content'))
 		.map(content =>
 			Array.from(content.getElementsByClassName("activity resource modtype_resource "))
+			 	.filter(resource => resource.getElementsByTagName("a")[0]) // if the resource is not available, there'll be no urls.
 				.map(resource => ({
 					name: cleanupName(resource.getElementsByClassName("instancename")[0].innerText),
 					url: resource.getElementsByTagName("a")[0].href + "&redirect=1",
