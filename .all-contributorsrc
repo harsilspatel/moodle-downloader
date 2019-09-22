@@ -1,6 +1,11 @@
 {
+  "projectName": "MoodleDownloader",
+  "projectOwner": "harsilspatel",
+  "repoType": "github",
+  "repoHost": "https://github.com",
   "files": ["README.md"],
   "imageSize": 100,
+  "commit": false,
   "contributorsPerLine": 7,
   "badgeTemplate": "[![All Contributors](https://img.shields.io/badge/all_contributors-<%= contributors.length %>-orange.svg?style=flat-square)](#contributors)",
   "contributorTemplate": "<%= avatarBlock %><br /><%= contributions %>",
@@ -11,6 +16,5 @@
       "link": "[<%= symbol %>](<%= url %> \"<%= description %>\"),"
     }
   },
-  "skipCi": "true",
   "contributors": []
 }
