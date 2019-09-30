@@ -1,5 +1,5 @@
 # MoodleDownloader
-[![All Contributors](https://img.shields.io/badge/all_contributors-4-orange.svg?style=flat-square)](#contributors)
+[![All Contributors](https://img.shields.io/badge/all_contributors-5-orange.svg?style=flat-square)](#contributors)
 > A chrome extension for downloading Moodle resources 💾
 
 ![Chrome Web Store](https://img.shields.io/chrome-web-store/rating/ohhocacnnfaiphiahofcnfakdcfldbnh.svg)
@@ -62,6 +62,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     <td align="center"><a href="https://github.com/theya222"><img src="https://avatars0.githubusercontent.com/u/28100101?v=4" width="100px;" alt="Yusuf Ades"/><br /><sub><b>Yusuf Ades</b></sub></a><br /><a href="https://github.com/harsilspatel/MoodleDownloader/issues?q=author%3Atheya222" title="Bug reports">🐛</a></td>
     <td align="center"><a href="http://www.asherlzr.com"><img src="https://avatars0.githubusercontent.com/u/32557572?v=4" width="100px;" alt="Asher Lim"/><br /><sub><b>Asher Lim</b></sub></a><br /><a href="#ideas-asherLZR" title="Ideas, Planning, & Feedback">🤔</a></td>
     <td align="center"><a href="http://erikhausen.com"><img src="https://avatars1.githubusercontent.com/u/6204129?v=4" width="100px;" alt="Erik Hausen"/><br /><sub><b>Erik Hausen</b></sub></a><br /><a href="https://github.com/harsilspatel/MoodleDownloader/issues?q=author%3Aehausen" title="Bug reports">🐛</a></td>
+    <td align="center"><a href="https://github.com/LapisLazulis"><img src="https://avatars3.githubusercontent.com/u/42072300?v=4" width="100px;" alt="LapisLazulis"/><br /><sub><b>LapisLazulis</b></sub></a><br /><a href="https://github.com/harsilspatel/MoodleDownloader/issues?q=author%3ALapisLazulis" title="Bug reports">🐛</a></td>
   </tr>
 </table>
 
