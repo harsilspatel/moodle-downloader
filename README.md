@@ -48,6 +48,3 @@ Icon made by [kiranshastry](https://www.flaticon.com/authors/kiranshastry) from 
 
 
 ### Checkout more awesome projects built by Monash students [here](https://github.com/lorderikir/awesome-monashstudentprojects) 😎
-
-# Contributors
-
