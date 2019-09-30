@@ -1,5 +1,5 @@
 # MoodleDownloader
-[![All Contributors](https://img.shields.io/badge/all_contributors-2-orange.svg?style=flat-square)](#contributors)
+[![All Contributors](https://img.shields.io/badge/all_contributors-3-orange.svg?style=flat-square)](#contributors)
 > A chrome extension for downloading Moodle resources 💾
 
 ![Chrome Web Store](https://img.shields.io/chrome-web-store/rating/ohhocacnnfaiphiahofcnfakdcfldbnh.svg)
@@ -60,6 +60,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
   <tr>
     <td align="center"><a href="http://jonathanyeung.me"><img src="https://avatars1.githubusercontent.com/u/38239969?v=4" width="100px;" alt="Jonathan Yeung"/><br /><sub><b>Jonathan Yeung</b></sub></a><br /><a href="https://github.com/harsilspatel/MoodleDownloader/commits?author=YeungJonathan" title="Code">💻</a></td>
     <td align="center"><a href="https://github.com/theya222"><img src="https://avatars0.githubusercontent.com/u/28100101?v=4" width="100px;" alt="Yusuf Ades"/><br /><sub><b>Yusuf Ades</b></sub></a><br /><a href="https://github.com/harsilspatel/MoodleDownloader/issues?q=author%3Atheya222" title="Bug reports">🐛</a></td>
+    <td align="center"><a href="http://www.asherlzr.com"><img src="https://avatars0.githubusercontent.com/u/32557572?v=4" width="100px;" alt="Asher Lim"/><br /><sub><b>Asher Lim</b></sub></a><br /><a href="#ideas-asherLZR" title="Ideas, Planning, & Feedback">🤔</a></td>
   </tr>
 </table>
 
