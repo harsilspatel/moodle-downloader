@@ -1,4 +1,5 @@
 # MoodleDownloader
+[![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors)
 > A chrome extension for downloading Moodle resources 💾
 
 ![Chrome Web Store](https://img.shields.io/chrome-web-store/rating/ohhocacnnfaiphiahofcnfakdcfldbnh.svg)
@@ -48,3 +49,19 @@ Icon made by [kiranshastry](https://www.flaticon.com/authors/kiranshastry) from 
 
 
 ### Checkout more awesome projects built by Monash students [here](https://github.com/lorderikir/awesome-monashstudentprojects) 😎
+
+## Contributors ✨
+
+Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
+
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore -->
+<table>
+  <tr>
+    <td align="center"><a href="http://jonathanyeung.me"><img src="https://avatars1.githubusercontent.com/u/38239969?v=4" width="100px;" alt="Jonathan Yeung"/><br /><sub><b>Jonathan Yeung</b></sub></a><br /><a href="https://github.com/harsilspatel/MoodleDownloader/commits?author=YeungJonathan" title="Code">💻</a></td>
+  </tr>
+</table>
+
+<!-- ALL-CONTRIBUTORS-LIST:END -->
+
+This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
