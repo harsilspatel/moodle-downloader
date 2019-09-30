@@ -13,6 +13,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "theya222",
+      "name": "Yusuf Ades",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/28100101?v=4",
+      "profile": "https://github.com/theya222",
+      "contributions": [
+        "bug"
+      ]
     }
   ],
   "contributorsPerLine": 7,
