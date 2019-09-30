@@ -1,0 +1,23 @@
+{
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": false,
+  "contributors": [
+    {
+      "login": "YeungJonathan",
+      "name": "Jonathan Yeung",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/38239969?v=4",
+      "profile": "http://jonathanyeung.me",
+      "contributions": [
+        "code"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7,
+  "projectName": "MoodleDownloader",
+  "projectOwner": "harsilspatel",
+  "repoType": "github",
+  "repoHost": "https://github.com"
+}
