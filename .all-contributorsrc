@@ -31,6 +31,15 @@
       "contributions": [
         "ideas"
       ]
+    },
+    {
+      "login": "ehausen",
+      "name": "Erik Hausen",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/6204129?v=4",
+      "profile": "http://erikhausen.com",
+      "contributions": [
+        "bug"
+      ]
     }
   ],
   "contributorsPerLine": 7,
