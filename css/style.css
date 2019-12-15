@@ -5,3 +5,11 @@
   border: 1px solid rgba(0,0,0,.2);
   border-radius: .25rem;
 	}
+
+#shareLink {
+	display: inline-flex;
+	vertical-align: middle;
+	float: right;
+	padding-top: 1%;
+	color: black;
+}

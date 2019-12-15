@@ -21,6 +21,20 @@ function main() {
 		downloadResources()
 	});
 
+	document.getElementById("shareLink").addEventListener("click", () => {
+		var copyFrom = document.createElement("textarea");
+		copyFrom.textContent = "https://chrome.google.com/webstore/detail/geckodm/pgkfjobhhfckamidemkddfnnkknomobe";
+		document.body.appendChild(copyFrom);
+		copyFrom.select();
+		document.execCommand('copy');
+		copyFrom.blur();
+		document.body.removeChild(copyFrom);
+	})
+
+	document.getElementById("sourceCode").addEventListener("click", () => {
+		chrome.tabs.create({url: 'https:github.com/harsilspatel/moodleDownloader'})
+	})
+
 	// filter resources on input
 	const searchField = document.getElementById("search");
 	searchField.addEventListener("input", () => {
@@ -133,7 +147,7 @@ function suggestFilename(downloadItem, suggest) {
 		item = resourcesList.filter(r => r.url==downloadItem.url)[0],
 		console.log(downloadItem),
 		console.log(resourcesList),
-		suggest({filename: item.course + '/' + item.section + '/' + downloadItem.filename})
+		suggest({filename: `${item.course}/${item.section}/${downloadItem.filename}`.replace(/[^\w.]+/g," ")})
 }
 
 function downloadResources() {
