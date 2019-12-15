@@ -1,9 +1,12 @@
-# MoodleDownloader
-[![All Contributors](https://img.shields.io/badge/all_contributors-5-orange.svg?style=flat-square)](#contributors)
-> A chrome extension for downloading Moodle resources 💾
+<p align="center">
+  <img src="assets/icon512.png" width="20%" height="20%">
+</p>
 
+[![All Contributors](https://img.shields.io/badge/all_contributors-5-orange.svg?style=flat-square)](#contributors)
 ![Chrome Web Store](https://img.shields.io/chrome-web-store/rating/ohhocacnnfaiphiahofcnfakdcfldbnh.svg)
 ![Chrome Web Store](https://img.shields.io/chrome-web-store/users/ohhocacnnfaiphiahofcnfakdcfldbnh.svg)
+
+A chrome extension for batch downloading Moodle resources 💾
 
 ## Why 💭
 There are dozens of apps/scripts for downloading moodle resources out there, however, none of them are operable by a non-IT student. For instance, an average art student doesn't know (or doesn't even care) how to execute terminal commands to get those moodle files, therefore I decided to create an average-user-friendly tool! Additionally, this is my exercise in both improving my javascript and better understand how google analytics and chrome apis work (mostly the latter!)
