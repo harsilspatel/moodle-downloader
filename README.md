@@ -1,5 +1,8 @@
+
 <p align="center">
-  <img src="assets/icon512.png" width="20%" height="20%">
+  <a href="https://chrome.google.com/webstore/detail/moodle-downloader/ohhocacnnfaiphiahofcnfakdcfldbnh">
+    <img src="assets/icon512.png" width="20%" height="20%">
+  </a>
 </p>
 
 <h1 align="center">
