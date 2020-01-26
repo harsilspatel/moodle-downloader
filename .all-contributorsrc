@@ -49,11 +49,21 @@
       "contributions": [
         "bug"
       ]
+    },
+    {
+      "login": "gagarine",
+      "name": "Simon Perdrisat",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/164074?v=4",
+      "profile": "http://perdrisat.com",
+      "contributions": [
+        "bug"
+      ]
     }
   ],
   "contributorsPerLine": 7,
   "projectName": "MoodleDownloader",
   "projectOwner": "harsilspatel",
   "repoType": "github",
-  "repoHost": "https://github.com"
+  "repoHost": "https://github.com",
+  "skipCi": true
 }
