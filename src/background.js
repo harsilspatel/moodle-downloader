@@ -15,7 +15,7 @@ function getFilesUnderSection() {
 			Array.from(content.getElementsByClassName("activity resource modtype_resource "))
 			 	.filter(resource => resource.getElementsByTagName("a")[0]) // if the resource is not available, there'll be no urls.
 				.map(resource => ({
-					name: cleanupName(resource.getElementsByClassName("instancename")[0].innerText),
+					name: cleanupName(resource.getElementsByClassName("instancename")[0].innerText.trim().toLowerCase()),
 					url: resource.getElementsByTagName("a")[0].href + "&redirect=1",
 					section: content.getElementsByTagName("h3")[0].innerText.trim()})))
 		.reduce((x, y) => x.concat(y), []);
@@ -38,17 +38,16 @@ function getFilesUnderResources() {
 function getFiles() {
 	let courseName;
 	try {
-		courseName = document.getElementsByTagName('h1')[0].innerText;
+		courseName = document.getElementsByTagName('h1')[0].innerText || document.getElementsByClassName('breadcrumb-item')[2].firstElementChild.title;
 	} catch {
-		courseName = document.getElementsByClassName('breadcrumb-item')[2].firstElementChild.title;
+		courseName = '';
 	}
 
 	let filesUnderSection = getFilesUnderSection()
 	let filesUnderResources = getFilesUnderResources();
 	let allFiles = filesUnderSection.concat(filesUnderResources);
-	// console.log(filesUnderSection);
-	// console.log(filesUnderResources);
-	// console.log(allFiles);
+	console.log(filesUnderSection);
+	console.log(filesUnderResources);
 	allFiles.forEach(file => file.course = courseName)
 	return allFiles;
 }

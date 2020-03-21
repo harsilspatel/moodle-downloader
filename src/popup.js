@@ -144,10 +144,11 @@ function updateDownloads(newDownloads) {
 }
 
 function suggestFilename(downloadItem, suggest) {
-		item = resourcesList.filter(r => r.url==downloadItem.url)[0],
-		console.log(downloadItem),
-		console.log(resourcesList),
-		suggest({filename: `${item.course}/${item.section}/${downloadItem.filename}`.replace(/[^\w.]+/g," ")})
+		const item = resourcesList.filter(r => r.url==downloadItem.url)[0];
+		console.log(resourcesList);
+		const suggestedFilename = `${item.course.replace(/[^\w.]+/g," ")}/${item.section.replace(/[^\w.]+/g," ")}/${downloadItem.filename.replace(/[^\w.]+/g," ")}`;
+		console.log(suggestedFilename);
+		suggest({filename: suggestedFilename});
 }
 
 function downloadResources() {
