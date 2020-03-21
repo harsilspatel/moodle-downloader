@@ -58,6 +58,15 @@
       "contributions": [
         "bug"
       ]
+    },
+    {
+      "login": "ssccc",
+      "name": "ssccc",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/32818143?v=4",
+      "profile": "https://github.com/ssccc",
+      "contributions": [
+        "bug"
+      ]
     }
   ],
   "contributorsPerLine": 7,

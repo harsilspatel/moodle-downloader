@@ -84,6 +84,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     <td align="center"><a href="http://erikhausen.com"><img src="https://avatars1.githubusercontent.com/u/6204129?v=4" width="100px;" alt=""/><br /><sub><b>Erik Hausen</b></sub></a><br /><a href="https://github.com/harsilspatel/MoodleDownloader/issues?q=author%3Aehausen" title="Bug reports">🐛</a></td>
     <td align="center"><a href="https://github.com/LapisLazulis"><img src="https://avatars3.githubusercontent.com/u/42072300?v=4" width="100px;" alt=""/><br /><sub><b>LapisLazulis</b></sub></a><br /><a href="https://github.com/harsilspatel/MoodleDownloader/issues?q=author%3ALapisLazulis" title="Bug reports">🐛</a></td>
     <td align="center"><a href="http://perdrisat.com"><img src="https://avatars1.githubusercontent.com/u/164074?v=4" width="100px;" alt=""/><br /><sub><b>Simon Perdrisat</b></sub></a><br /><a href="https://github.com/harsilspatel/MoodleDownloader/issues?q=author%3Agagarine" title="Bug reports">🐛</a></td>
+    <td align="center"><a href="https://github.com/ssccc"><img src="https://avatars1.githubusercontent.com/u/32818143?v=4" width="100px;" alt=""/><br /><sub><b>ssccc</b></sub></a><br /><a href="https://github.com/harsilspatel/MoodleDownloader/issues?q=author%3Assccc" title="Bug reports">🐛</a></td>
   </tr>
 </table>
 
