@@ -3,7 +3,7 @@
 
   "name": "Moodle Downloader",
   "description": "A chrome extension for downloading Moodle resources",
-  "version": "1.4.8",
+  "version": "1.5.0",
   "icons": {
     "16": "assets/icon16.png",
     "24": "assets/icon24.png",
@@ -20,8 +20,6 @@
   "permissions": [
     "activeTab",
 		"downloads",
-    "storage",
-    "https://*/",
-    "http://*/"
+    "storage"
   ]
 }
