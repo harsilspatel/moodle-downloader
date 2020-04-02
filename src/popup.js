@@ -48,16 +48,14 @@ function main() {
 			const resources = result[0];
 			resourcesList = [...resources];
 			console.log(result);
-			resources.forEach(resource => {
+			resources.forEach((resource, index) => {
 				const resourceOption = document.createElement("option");
 
 				// creating option element such that the text will be
-				// the resource name and the option value its url.
-				resourceOption.value = resource.url;
+				// the resource name and the option value its index in the array.
+				resourceOption.value = index.toString();
 				resourceOption.title = resource.name;
 				resourceOption.innerHTML = resource.name;
-				resourceOption.course = resource.course;
-				resourceOption.section = resource.section;
 				resourceSelector.appendChild(resourceOption);
 			});
 		} catch(error) {
@@ -121,7 +119,7 @@ function requestFeedback() {
 function filterOptions() {
 	const searchField = document.getElementById("search");
 	const query = searchField.value.toLowerCase();
-	const regex = new RegExp(query);
+	const regex = new RegExp(query, "i");
 	const options = document.getElementById("resourceSelector").options;
 
 	resourcesList.forEach((resource, index) => {
@@ -143,12 +141,41 @@ function updateDownloads(newDownloads) {
 	});
 }
 
+let organizeChecked = false;
+let replaceFilename = false;
+
+function sanitiseFilename(filename) {
+	return filename.replace(/[\\/:*?"<>|]/g, "-");
+}
+
 function suggestFilename(downloadItem, suggest) {
-		const item = resourcesList.filter(r => r.url==downloadItem.url)[0];
-		console.log(resourcesList);
-		const suggestedFilename = `${item.course.replace(/[^\w.]+/g," ")}/${item.section.replace(/[^\w.]+/g," ")}/${downloadItem.filename.replace(/[^\w.]+/g," ")}`;
-		console.log(suggestedFilename);
-		suggest({filename: suggestedFilename});
+	const item = resourcesList.filter(r => r.downloadOptions.url==downloadItem.url)[0];
+	let filename = downloadItem.filename;
+	const sanitisedItemName = sanitiseFilename(item.name);
+
+	if (item.type === "URL") {
+		// The filename should be some arbitrary Blob UUID.
+		// We should always replace it with the item's name.
+		filename = sanitisedItemName + ".url";
+	} else if (item.type === "Page") {
+		filename = sanitisedItemName + ".html";
+	}
+
+	if (replaceFilename) {
+		const lastDot = filename.lastIndexOf(".");
+		const extension = lastDot === -1 ? "" : filename.slice(lastDot);
+		filename = sanitisedItemName + extension;
+	}
+
+	if (organizeChecked) {
+		suggest({filename:
+			sanitiseFilename(item.course) + '/' +
+			(item.section && sanitiseFilename(item.section) + '/') +
+			filename
+		});
+	} else {
+		suggest({filename});
+	}
 }
 
 function downloadResources() {
@@ -157,14 +184,13 @@ function downloadResources() {
 	const button = document.getElementById("downloadResources");
 	const resourceSelector = document.getElementById("resourceSelector");
 	const selectedOptions = Array.from(resourceSelector.selectedOptions);
-	const organizeChecked = document.getElementById('organize').checked;
+	organizeChecked = document.getElementById('organize').checked;
+	replaceFilename = document.getElementById('replaceFilename').checked;
 	const hasDownloadsListener = chrome.downloads.onDeterminingFilename.hasListener(suggestFilename);
 
-	// add/remove listener to organize files
-	if (organizeChecked && !hasDownloadsListener)
+	// add listener to organize files
+	if (!hasDownloadsListener)
 		chrome.downloads.onDeterminingFilename.addListener(suggestFilename);
-	else if (!organizeChecked && hasDownloadsListener)
-		chrome.downloads.onDeterminingFilename.removeListener(suggestFilename);
 
 	// hidding the button and showing warning text
 	button.setAttribute('hidden', 'hidden');
@@ -183,11 +209,50 @@ function downloadResources() {
 		requestFeedback();
 	}, (selectedOptions.length+4)*INTERVAL);
 
-	// selectedOptions.forEach(option => chrome.downloads.download({url: option.value}));
 	selectedOptions.forEach((option, index) => {
-		setTimeout(() => {
-			chrome.downloads.download({url: option.value})
-		}, index*INTERVAL);
+		const resourceIndex = Number(option.value);
+		const resource = resourcesList[resourceIndex];
+		if (resource.type === "URL") {
+			// We need to get the URL of the redirect and create a blob for it.
+			fetch(resource.downloadOptions.url, {method: "HEAD"}).then(req => {
+				const blob = new Blob([
+					`[InternetShortcut]\nURL=${req.url}\n`
+				], {type: "text/plain"});
+				const blobUrl = URL.createObjectURL(blob);
+				const newOptions = {
+					url: blobUrl
+				};
+				resource.downloadOptions = newOptions;
+				setTimeout(() => {
+					chrome.downloads.download(newOptions)
+				}, index*INTERVAL);
+			});
+		} else if (resource.type === "Page") {
+			fetch(resource.downloadOptions.url).then(req => {
+				return req.text();
+			}).then(text => {
+				// We want to grab "[role='main']" from the text and save that
+				// as an HTML file.
+				const parser = new DOMParser();
+				const doc = parser.parseFromString(text, "text/html");
+				const toSave = doc.querySelector("[role='main']").outerHTML;
+				const blob = new Blob([
+					toSave
+				], {type: "text/html"});
+				const blobUrl = URL.createObjectURL(blob);
+				const newOptions = {
+					url: blobUrl
+				};
+				resource.downloadOptions = newOptions;
+				setTimeout(() => {
+					chrome.downloads.download(newOptions)
+				}, index*INTERVAL);
+			});
+		} else {
+			setTimeout(() => {
+				chrome.downloads.download(resource.downloadOptions)
+			}, index*INTERVAL);
+		}
 	});
 
 	ga('send', 'event', {
