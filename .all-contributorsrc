@@ -67,10 +67,21 @@
       "contributions": [
         "bug"
       ]
+    },
+    {
+      "login": "mcpower",
+      "name": "mcpower",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/6015058?v=4",
+      "profile": "https://mcpower.me",
+      "contributions": [
+        "ideas",
+        "code",
+        "test"
+      ]
     }
   ],
   "contributorsPerLine": 7,
-  "projectName": "MoodleDownloader",
+  "projectName": "moodle-downloader",
   "projectOwner": "harsilspatel",
   "repoType": "github",
   "repoHost": "https://github.com",
