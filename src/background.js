@@ -4,15 +4,7 @@
  * https://github.com/harsilspatel/MoodleDownloader
  */
 
-// The session key should normally be accessible through window.M.cfg.sesskey,
-// but getting the window object is hard.
-// Instead, we can grab the session key from the logout button.
-// Note that var is used here as this script can be executed multiple times.
-var sesskey = new URL(
-	document.querySelector("a[href*='login/logout.php']").href
-).searchParams.get("sesskey");
-
-function getDownloadOptions(url) {
+function getDownloadOptions(sesskey, url) {
 	if (!url.includes("folder")) {
 		// Resources, URLs, Pages.
 		// URLs and Pages need to be handled in popup.js.
@@ -46,7 +38,7 @@ function getDownloadOptions(url) {
 
 var SUPPORTED_FILES = new Set(["File", "Folder", "URL", "Page"]);
 
-function getFilesUnderSection() {
+function getFilesUnderSection(sesskey) {
 	return Array.from(document.getElementsByClassName("content"))
 		.map(content => {
 			const sectionEl = content.querySelector("h3.sectionname");
@@ -65,7 +57,10 @@ function getFilesUnderSection() {
 				)
 				.map(({ instanceName, archorTag }) => ({
 					name: instanceName.firstChild.textContent.trim(),
-					downloadOptions: getDownloadOptions(archorTag.href),
+					downloadOptions: getDownloadOptions(
+						sesskey,
+						archorTag.href
+					),
 					type: instanceName.lastChild.textContent.trim(),
 					section: section
 				}))
@@ -74,7 +69,7 @@ function getFilesUnderSection() {
 		.reduce((x, y) => x.concat(y), []);
 }
 
-function getFilesUnderResources(tableBody) {
+function getFilesUnderResources(sesskey, tableBody) {
 	return Array.from(tableBody.children) // to get files under Resources tab
 		.filter(resource => resource.getElementsByTagName("img").length != 0)
 		.map(
@@ -84,6 +79,7 @@ function getFilesUnderResources(tableBody) {
 						.getElementsByTagName("a")[0]
 						.textContent.trim(),
 					downloadOptions: getDownloadOptions(
+						sesskey,
 						resource.getElementsByTagName("a")[0].href
 					),
 					type: resource.getElementsByTagName("img")[0]["alt"].trim(),
@@ -112,13 +108,21 @@ function getFiles() {
 			.textContent.trim() ||
 		"";
 
+	// The session key should normally be accessible through window.M.cfg.sesskey,
+	// but getting the window object is hard.
+	// Instead, we can grab the session key from the logout button.
+	// Note that var is used here as this script can be executed multiple times.
+	const sesskey = new URL(
+		document.querySelector("a[href*='login/logout.php']").href
+	).searchParams.get("sesskey");
+
 	const tableBody = document.querySelector(
 		"div[role='main'] > table.generaltable.mod_index > tbody"
 	);
 	const allFiles =
 		tableBody === null
-			? getFilesUnderSection()
-			: getFilesUnderResources(tableBody);
+			? getFilesUnderSection(sesskey)
+			: getFilesUnderResources(sesskey, tableBody);
 	allFiles.forEach(file => (file.course = courseName));
 	console.log(allFiles);
 	return allFiles;
