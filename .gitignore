@@ -1,3 +1,6 @@
 .idea
 moodleDownloader.safariextension
 Firefox
+build
+node_modules
+tests

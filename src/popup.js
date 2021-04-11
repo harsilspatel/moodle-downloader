@@ -116,8 +116,7 @@ function requestFeedback() {
                 });
                 nah.setAttribute("hidden", "hidden");
                 sure.setAttribute("hidden", "hidden");
-                feedbackPrompt.innerHTML =
-                    "No problem, you have a good one! 😄";
+                feedbackPrompt.innerHTML = "";
                 setTimeout(() => {
                     feedbackDiv.setAttribute("hidden", "hidden");
                 }, 2000);
@@ -129,7 +128,7 @@ function requestFeedback() {
                 });
                 nah.setAttribute("hidden", "hidden");
                 sure.setAttribute("hidden", "hidden");
-                feedbackPrompt.innerHTML = "Thanks so much 💝";
+                feedbackPrompt.innerHTML = "You're a very considerate human! 💝";
                 setTimeout(() => {
                     feedbackDiv.setAttribute("hidden", "hidden");
                     chrome.tabs.create({
