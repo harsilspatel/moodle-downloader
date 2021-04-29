@@ -99,14 +99,17 @@ function getFilesUnderResources(sesskey, tableBody) {
 }
 
 function getFiles() {
-	const courseName =
-		document.getElementsByClassName("header-title")[0].innerText ||
-		document.getElementsByClassName("breadcrumb-item")[2].firstElementChild
-			.title ||
-		document
-			.querySelector("header#page-header .header-title")
-			.textContent.trim() ||
-		"";
+	const h1s = document.getElementsByTagName("h1");
+	const headerTitles = document.getElementsByClassName("header-title");
+	const breadcrumbItems = document.getElementsByClassName("breadcrumb-item");
+	const pageHeader = document.querySelector("header#page-header .header-title")
+	const courseName = (
+			h1s.length && h1s[0].innerText ||
+			headerTitles.length && headerTitles[0].innerText ||
+			pageHeader.textContent ||
+			breadcrumbItems.length > 2 && breadcrumbItems[2].firstElementChild.title ||
+			""
+		).trim();
 
 	// The session key should normally be accessible through window.M.cfg.sesskey,
 	// but getting the window object is hard.
