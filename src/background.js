@@ -100,7 +100,7 @@ function getFilesUnderResources(sesskey, tableBody) {
 
 function getFiles() {
 	const courseName =
-		document.getElementsByTagName("h1")[0].innerText ||
+		document.getElementsByClassName("header-title")[0].innerText ||
 		document.getElementsByClassName("breadcrumb-item")[2].firstElementChild
 			.title ||
 		document
