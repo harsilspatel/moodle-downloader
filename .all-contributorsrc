@@ -78,6 +78,15 @@
         "code",
         "test"
       ]
+    },
+    {
+      "login": "angustrau",
+      "name": "Angus Trau",
+      "avatar_url": "https://avatars.githubusercontent.com/u/13267947?v=4",
+      "profile": "https://angus.ws",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
