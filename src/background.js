@@ -4,6 +4,13 @@
  * https://github.com/harsilspatel/MoodleDownloader
  */
 
+// TODO: instead of depending on the user's location, we should detect and scrape the course id of the user and automatically go to the resources page: https://moodle.univ-lille.fr/course/resources.php?id={course_id}
+// NOTE: this page contains all the resources of the moodle course in a single page, so we can easily scrape all the resources from here.
+
+// TODO: check if this resources page is available on all moodle version, if it can be disabled or not, etc. To include as much debug options and indications as possible for the end users.
+
+// TODO: use typescript for better type checking and to avoid bugs
+
 function getDownloadOptions(sesskey, url) {
 	if (!url.includes("folder")) {
 		// Resources, URLs, Pages.
@@ -74,19 +81,19 @@ function getFilesUnderResources(sesskey, tableBody) {
 		.filter(resource => resource.getElementsByTagName("img").length != 0)
 		.map(
 			resource =>
-				(resource = {
-					name: resource
-						.getElementsByTagName("a")[0]
-						.textContent.trim(),
-					downloadOptions: getDownloadOptions(
-						sesskey,
-						resource.getElementsByTagName("a")[0].href
-					),
-					type: resource.getElementsByTagName("img")[0]["alt"].trim(),
-					section: resource
-						.getElementsByTagName("td")[0]
-						.textContent.trim()
-				})
+			(resource = {
+				name: resource
+					.getElementsByTagName("a")[0]
+					.textContent.trim(),
+				downloadOptions: getDownloadOptions(
+					sesskey,
+					resource.getElementsByTagName("a")[0].href
+				),
+				type: resource.getElementsByTagName("img")[0]["alt"].trim(),
+				section: resource
+					.getElementsByTagName("td")[0]
+					.textContent.trim()
+			})
 		)
 		.map((resource, index, array) => {
 			resource.section =
@@ -98,37 +105,53 @@ function getFilesUnderResources(sesskey, tableBody) {
 		.filter(resource => SUPPORTED_FILES.has(resource.type));
 }
 
-function getFiles() {
-	const h1s = document.getElementsByTagName("h1");
-	const headerTitles = document.getElementsByClassName("header-title");
-	const breadcrumbItems = document.getElementsByClassName("breadcrumb-item");
-	const pageHeader = document.querySelector("header#page-header .header-title")
-	const courseName = (
-			h1s.length && h1s[0].innerText ||
-			headerTitles.length && headerTitles[0].innerText ||
-			pageHeader.textContent ||
-			breadcrumbItems.length > 2 && breadcrumbItems[2].firstElementChild.title ||
-			""
-		).trim();
+const ExtractLinksFromText = (textHtml) => {
+	const parser = new DOMParser();
 
-	// The session key should normally be accessible through window.M.cfg.sesskey,
-	// but getting the window object is hard.
-	// Instead, we can grab the session key from the logout button.
-	// Note that var is used here as this script can be executed multiple times.
-	const sesskey = new URL(
-		document.querySelector("a[href*='login/logout.php']").href
-	).searchParams.get("sesskey");
+	const doc = parser.parseFromString(textHtml, 'text/html');
 
-	const tableBody = document.querySelector(
-		"div[role='main'] > table.generaltable.mod_index > tbody"
-	);
-	const allFiles =
-		tableBody === null
-			? getFilesUnderSection(sesskey)
-			: getFilesUnderResources(sesskey, tableBody);
-	allFiles.forEach(file => (file.course = courseName));
-	console.log(allFiles);
-	return allFiles;
+	const anchorTags = doc.querySelectorAll('a');
+
+	const links = Array.from(anchorTags)
+		.map(anchor => anchor.getAttribute('href'))
+		// NOTE: to exclude all null or empty href tags
+		.filter(link => link !== null && link !== '');
+
+	return links.length > 0 ? links : [];
+};
+
+const HtmlTableDataParser = (table) => {
+	const data = [];
+
+	const rows = table.rows;
+
+	for (let i = 0; i < rows.length; i++) {
+		const cells = rows[i].cells;
+		const rowData = [];
+
+		for (let j = 0; j < cells.length; j++) {
+			rowData.push({
+				name: cells[j].innerText,
+				links: ExtractLinksFromText(String(cells[j].innerHTML))
+			});
+		}
+
+		data.push(rowData);
+	}
+
+	return data;
 }
 
-getFiles();
+const main = () => {
+	const table = document.getElementsByClassName("generaltable mod_index")[0];
+
+	const data = HtmlTableDataParser(table);
+
+	// TODO: transform the data and extract sort of object for each resource, the object should contain the resource name, url and type (type will be empty at first)
+
+	// TODO: complete the previously extracted data by visiting each url and getting the type of the resource (pdf, php, etc)
+
+	// TODO: pass the appropriate data / types to a downloader that'll automatically download the data depending on whether it is url, direct file, etc
+
+	return 0
+}
