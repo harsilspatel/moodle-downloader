@@ -68,8 +68,8 @@ function ReShapeHtmlTableRawData(rawData) {
 			links: [
 				// TODO: the links should be an array of objects where each object has a link and a type of the link (pdf, php, etc) and a source: "resource" or "description"
 				// TODO: if the link don't directly point to a pdf like resource, we should visit the link and get the type of the resource and replace the link with the direct link to the resource
-				...resource.links.map(link => ({ link, type: "UNKNOWN", source: "resource" })),
-				...description.links.map(link => ({ link, type: "UNKNOWN", source: "description" }))
+				...resource.links.map(link => ({ url: link, type: "URL", source: "resource" })),
+				...description.links.map(link => ({ url: link, type: "URL", source: "description" }))
 			]
 		});
 	});

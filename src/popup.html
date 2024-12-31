@@ -1,14 +1,15 @@
-<meta charset="UTF-8">
-<!doctype html>
+<!DOCTYPE html>
 <html>
 
 <head>
+  <meta charset="UTF-8">
   <title>Moodle Downloader</title>
   <link rel="stylesheet" type="text/css" href="../css/style.css">
   <link rel="stylesheet" href="../css/material.min.css">
   <script src="../css/material.min.js"></script>
   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
   <script src="./popup.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
 <div class="demo-card-wide mdl-card mdl-shadow--2dp">
@@ -18,13 +19,11 @@
 
   <div class="mdl-card__actions mdl-card--border">
 
-    <small style="font-size:75%; padding-left: 1%;">Click and drag or use ⌘ key to select multiple options:</small>
-    <div style="padding-left: 1%">
-      <div class="mdl-textfield mdl-js-textfield">
-        <input style="font-size:75%;" class="mdl-textfield__input" type="text" id="search">
-        <label style="font-size:75%;" class="mdl-textfield__label" for="search">search... (regex supported)</label>
-      </div>
+    <div class="mdl-textfield mdl-js-textfield">
+      <input style="font-size:75%;" class="mdl-textfield__input" placeholder="search (regex is supported)" type="text"
+        id="search">
     </div>
+
     <select multiple class="mdl-textfield__input" id="resources-selector">
     </select>
     <br>

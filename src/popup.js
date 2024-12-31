@@ -27,6 +27,8 @@ const PopulateSelector = (resources, selector) => {
 
         selector.appendChild(option);
     });
+
+    return resources;
 }
 
 const Main = () => {
@@ -35,7 +37,11 @@ const Main = () => {
 
     // NOTE: executing background.js to populate the select form
     chrome.tabs.executeScript({ file: BACKGROUND_SCRIPT_FILE_PATH }, result => {
-        resources = PopulateSelector(result, document.getElementById(RESOURCES_SELECTOR_ID));
+        if (chrome.runtime.lastError)
+            console.error(`[error]: from background.js script execution.`, chrome.runtime.lastError.message);
+        else
+            // NOTE: result is an array of the resources
+            resources = PopulateSelector(result[0], document.getElementById(RESOURCES_SELECTOR_ID));
     });
 }
 
@@ -54,49 +60,44 @@ const FilterOptions = () => {
     });
 }
 
-const DownloadURLResource = (resource, index) => {
-    // We need to get the URL of the redirect and create a blob for it.
-    fetch(resource.downloadOptions.url, { method: "HEAD" }).then(
-        req => {
-            const blob = new Blob(
-                [`[InternetShortcut]\nURL=${req.url}\n`],
-                { type: "text/plain" }
-            );
-            const blobUrl = URL.createObjectURL(blob);
-            const newOptions = {
-                url: blobUrl
-            };
-            resource.downloadOptions = newOptions;
-            setTimeout(() => {
-                chrome.downloads.download(newOptions);
-            }, index * RESOURCES_DOWNLOADER_INTERVAL);
+const UrlResolver = async (initialUrl) => {
+    try {
+        const response = await fetch(initialUrl, {
+            method: 'HEAD',
+            redirect: 'follow'
         });
+
+        return response.url;
+    } catch (error) {
+        console.error(`[url-downloader]: failed to resolve final URL for "${initialUrl}".`);
+        return null;
+    }
 }
 
-const DownloadPageResource = (resource, index) => {
-    fetch(resource.downloadOptions.url)
-        .then(req => {
-            return req.text();
-        })
-        .then(text => {
-            // We want to grab "[role='main']" from the text and save that
-            // as an HTML file.
-            const parser = new DOMParser();
-            const doc = parser.parseFromString(text, "text/html");
-            const toSave = doc.querySelector("[role='main']").outerHTML;
-            const blob = new Blob([toSave], { type: "text/html" });
-            const blobUrl = URL.createObjectURL(blob);
-            const newOptions = {
-                url: blobUrl
-            };
-            resource.downloadOptions = newOptions;
-            setTimeout(() => {
-                chrome.downloads.download(newOptions);
-            }, index * RESOURCES_DOWNLOADER_INTERVAL);
-        });
+
+const DownloadURLResource = async (unresolvedUrl, index) => {
+    const url = await UrlResolver(unresolvedUrl);
+
+    if (!chrome || !chrome.downloads) {
+        console.error("chrome.downloads API is not available.");
+        return;
+    }
+
+    chrome.downloads.download({
+        url: url,
+        filename: url.split("/").pop()
+    }, (downloadId) => {
+        if (chrome.runtime.lastError) {
+            console.error("Error during download:", chrome.runtime.lastError.message);
+        } else {
+            console.log(`Download started with ID: ${downloadId}`);
+        }
+    });
 }
 
 const DownloadUnknownResource = (resource, index) => {
+    console.log("[unknown-downloader]: downloading resource.");
+
     setTimeout(() => {
         chrome.downloads.download(resource.downloadOptions);
     }, index * RESOURCES_DOWNLOADER_INTERVAL);
@@ -104,24 +105,30 @@ const DownloadUnknownResource = (resource, index) => {
 
 const RESOURCES_TYPES_DOWNLOADERS = {
     "URL": DownloadURLResource,
-    "PAGE": DownloadPageResource,
     "UNKNOWN": DownloadUnknownResource
 }
 
 const DownloadResource = (resource, index) => {
-    const downloader = RESOURCES_TYPES_DOWNLOADERS[resource.downloadOptions.type] || RESOURCES_TYPES_DOWNLOADERS["UNKNOWN"];
+    const downloads = resource.links.map((link, subIndex) => {
+        const downloader = RESOURCES_TYPES_DOWNLOADERS[link.type] || RESOURCES_TYPES_DOWNLOADERS["UNKNOWN"];
 
-    return downloader(resource, index);
+        return downloader(link.url, index * (subIndex + 1));
+    });
+
+    return downloads;
 }
 
 const DownloadSelectedResources = () => {
     const selector = document.getElementById(RESOURCES_SELECTOR_ID);
 
-    const selected = Array.from(selector.selected);
+    const selectedResourcesIds = Array.from(selector.selectedOptions).map(option => option.value);
 
-    selected.forEach((option, index) => {
-        const resourceId = Number(option.value);
-        const resource = resources.find(resource => resource.id === resourceId);
+    console.log(`[resourcesIds]: ${selectedResourcesIds}`);
+
+    selectedResourcesIds.forEach((selectedResourceId, index) => {
+        const resource = resources.find(resource => resource.id === parseInt(selectedResourceId));
+
+        console.log(resource)
 
         DownloadResource(resource, index);
     });
