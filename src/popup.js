@@ -83,16 +83,16 @@ const DownloadURLResource = async (unresolvedUrl, index) => {
         return;
     }
 
-    chrome.downloads.download({
-        url: url,
-        filename: url.split("/").pop()
-    }, (downloadId) => {
-        if (chrome.runtime.lastError) {
-            console.error("Error during download:", chrome.runtime.lastError.message);
-        } else {
-            console.log(`Download started with ID: ${downloadId}`);
-        }
-    });
+    const response = await fetch(url);
+
+    if (!response.ok) {
+        console.error(`[url-downloader]: failed to download "${url}".`);
+        return null;
+    }
+
+    const blob = await response.blob();
+
+    return blob;
 }
 
 const DownloadUnknownResource = (resource, index) => {
@@ -118,7 +118,9 @@ const DownloadResource = (resource, index) => {
     return downloads;
 }
 
-const DownloadSelectedResources = () => {
+const DownloadSelectedResources = async () => {
+    const zip = new JSZip();
+
     const selector = document.getElementById(RESOURCES_SELECTOR_ID);
 
     const selectedResourcesIds = Array.from(selector.selectedOptions).map(option => option.value);
@@ -128,10 +130,21 @@ const DownloadSelectedResources = () => {
     selectedResourcesIds.forEach((selectedResourceId, index) => {
         const resource = resources.find(resource => resource.id === parseInt(selectedResourceId));
 
-        console.log(resource)
+        const resourceBlobs = DownloadResource(resource, index);
 
-        DownloadResource(resource, index);
-    });
+        resourceBlobs.forEach((blob, subIndex) => {
+            zip.file(`${resource.name}_${subIndex}.pdf`, blob);
+        });
+    })
+
+    const blob = await zip.generateAsync({ type: "blob" });
+
+    const url = URL.createObjectURL(blob);
+
+    chrome.downloads.download({
+        url: url,
+        filename: "resources.zip",
+    })
 }
 
 // NOTE: run the main function once all the HTML content is loaded
