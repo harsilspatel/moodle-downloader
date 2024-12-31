@@ -1,25 +1,20 @@
 {
-  "manifest_version": 2,
+	"manifest_version": 2,
 
-  "name": "Moodle Downloader",
-  "description": "A chrome extension for downloading Moodle resources",
-  "version": "1.5.3",
-  "icons": {
-    "16": "assets/icon16.png",
-    "24": "assets/icon24.png",
-    "32": "assets/icon32.png",
-    "64": "assets/icon64.png",
-    "128": "assets/icon128.png",
-    "256": "assets/icon256.png",
-    "512": "assets/icon512.png"
-  },
-  "browser_action": {
-    "default_popup": "src/popup.html"
-  },
-  "content_security_policy": "script-src 'self' https://www.google-analytics.com; object-src 'self'",
-  "permissions": [
-    "activeTab",
-		"downloads",
-    "storage"
-  ]
+	"name": "Moodle Downloader",
+	"description": "A chrome extension for downloading Moodle resources",
+	"version": "1.5.3",
+	"icons": {
+		"16": "assets/icon16.png",
+		"24": "assets/icon24.png",
+		"32": "assets/icon32.png",
+		"64": "assets/icon64.png",
+		"128": "assets/icon128.png",
+		"256": "assets/icon256.png",
+		"512": "assets/icon512.png"
+	},
+	"browser_action": {
+		"default_popup": "src/popup.html"
+	},
+	"permissions": ["activeTab", "downloads", "storage"]
 }
