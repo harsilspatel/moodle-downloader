@@ -49,7 +49,8 @@ const FilterOptions = () => {
     const search = document.getElementById(RESOURCES_SEARCH_INPUT_ID);
     const query = search.value.toLowerCase();
     const regex = new RegExp(query, "i");
-    const options = document.getElementById(RESOURCES_SELECTOR_ID).options;
+
+    const options = Array.from(document.getElementById(RESOURCES_SELECTOR_ID).options);
 
     options.forEach(option => {
         if (option.title.match(regex)) {
@@ -118,6 +119,16 @@ const DownloadResource = (resource, index) => {
     return downloads;
 }
 
+const GenerateZipFilename = () => {
+    const date = new Date();
+
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const year = date.getFullYear();
+
+    return `resources-${day}-${month}-${year}.zip`;
+}
+
 const DownloadSelectedResources = async () => {
     const zip = new JSZip();
 
@@ -143,8 +154,8 @@ const DownloadSelectedResources = async () => {
 
     chrome.downloads.download({
         url: url,
-        filename: "resources.zip",
-    })
+        filename: GenerateZipFilename(),
+    });
 }
 
 // NOTE: run the main function once all the HTML content is loaded
