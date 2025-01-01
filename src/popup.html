@@ -4,42 +4,42 @@
 <head>
   <meta charset="UTF-8">
   <title>Moodle Downloader</title>
-  <link rel="stylesheet" type="text/css" href="../css/style.css">
-  <link rel="stylesheet" href="../css/material.min.css">
-  <script src="../css/material.min.js"></script>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="./scripts/tailwind.min.js"></script>
   <script src="./scripts/jszip.min.js"></script>
   <script src="./popup.js"></script>
 </head>
 
-<div class="demo-card-wide mdl-card mdl-shadow--2dp">
-  <div class="mdl-card__title">
-    <h2 class="mdl-card__title-text">Moodle Downloader 📚</h2>
+<div class="p-0 bg-white w-96 h-64 flex flex-col items-center gap-0">
+  <!-- CARD HEADER -->
+  <div class="w-full p-4 border-b border-gray-500 flex flex-row items-center justify-between">
+    <div>
+      <h2 class="text-xl font-semibold">📚 Moodle Downloader</h2>
+    </div>
+    <a href="https://github.com/raideno/better-moodle-downloader" target="_blank">
+      <div class="bg-blue-200 rounded-full w-6 h-6 flex items-center justify-center cursor-pointer">
+        <div class="font-bold text-xs">i</div>
+      </div>
+    </a>
   </div>
 
-  <div class="mdl-card__actions mdl-card--border">
-
-    <div class="mdl-textfield mdl-js-textfield">
-      <input style="font-size:75%;" class="mdl-textfield__input" placeholder="search (regex is supported)" type="text"
-        id="search">
+  <!-- CARD CONTENT -->
+  <div class="w-full p-4 border-b border-gray-500 space-y-2">
+    <div class="border rounded border-gray-500 active:border-blue-500">
+      <input class="w-full p-2 rounded" placeholder="search (regex is supported)" type="text" id="search">
     </div>
 
-    <select multiple class="mdl-textfield__input" id="resources-selector">
-    </select>
-    <br>
-
-    <div style="padding-left: 1%;" id=footer>
-      <div style="zoom: .9">
-        <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored"
-          id="download-resources">Download</button>
-      </div>
-
-      <!-- TODO: add a text that notifies the user that he isn't in the resources page and thus can't download the resources -->
-      <!-- TODO: add something that says idk just some info -->
-
-      <!-- TODO: add  a button to redirect the user to the resources page -->
+    <div class="w-full p-2 rounded border border-gray-500 active:border-blue-500">
+      <select multiple class="w-full text-base rounded" id="resources-selector"></select>
     </div>
+  </div>
+
+  <!-- CARD FOOTER -->
+  <div class="w-full p-4 flex flex-col gap-1">
+    <div><span class="font-semibold text-red-500">NOTE: </span>In order to download moodle resources you must be in the
+      resources page of the moodle course.</div>
+
+    <button class="w-full bg-blue-500 p-4 rounded text-white font-bold disabled:bg-gray-500 disabled:opacity-50"
+      id="main-button" disabled>Main Button</button>
   </div>
 </div>
 </body>

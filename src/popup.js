@@ -4,10 +4,16 @@
  * https://github.com/harsilspatel/MoodleDownloader
  */
 
+// TODO: completely block the extension if we are not in a moodle page, to start with check that the url contains "moodle" in it, then make it more sofisticated by checking the page content, etc.
+// TODO: if the person isn't in a moodle page, display a blur with a message, but still give the option to display the extension and download in case the system hasn't been able to detect the moodle page.
+// TODO: give the choice for the user to manually enter the moodle course id, and then scrape the resources from the resources page.
+// TODO: give instructions, like some note with instructions that redirect to a video or something that shows how to download.
+// TODO: display the blur thing with a different message when the user is in a moodle site but not in a course page.
+
 const RESOURCES_DOWNLOADER_INTERVAL = 500;
 const BACKGROUND_SCRIPT_FILE_PATH = "./src/background.js";
 const RESOURCES_SELECTOR_ID = "resources-selector";
-const DOWNLOAD_RESOURCES_BUTTON_ID = "download-resources";
+const MAIN_BUTTON_ID = "main-button";
 const RESOURCES_SEARCH_INPUT_ID = "search";
 const FOOTER_ELEMENT_ID = "footer";
 
@@ -17,7 +23,7 @@ const SetupEventListener = (element, event, callback) => {
     element.addEventListener(event, callback);
 }
 
-const PopulateSelector = (resources, selector) => {
+const PopulateSelector = (resources, selector, selectAll = true) => {
     resources.forEach((resource, index) => {
         const option = document.createElement("option");
 
@@ -25,24 +31,115 @@ const PopulateSelector = (resources, selector) => {
         option.title = resource.name;
         option.innerHTML = resource.name;
 
+        if (selectAll)
+            option.selected = true;
+
         selector.appendChild(option);
     });
 
     return resources;
 }
 
-const Main = () => {
-    SetupEventListener(document.getElementById(DOWNLOAD_RESOURCES_BUTTON_ID), "click", DownloadSelectedResources);
-    SetupEventListener(document.getElementById(RESOURCES_SEARCH_INPUT_ID), "input", FilterOptions);
+const AreWeInMoodleSite = (rawUrl) => {
+    return rawUrl.includes("moodle");
+}
 
-    // NOTE: executing background.js to populate the select form
-    chrome.tabs.executeScript({ file: BACKGROUND_SCRIPT_FILE_PATH }, result => {
-        if (chrome.runtime.lastError)
-            console.error(`[error]: from background.js script execution.`, chrome.runtime.lastError.message);
-        else
-            // NOTE: result is an array of the resources
-            resources = PopulateSelector(result[0], document.getElementById(RESOURCES_SELECTOR_ID));
+const AreWeInMoodleCoursePage = (rawUrl) => {
+    return rawUrl.includes("course");
+}
+
+const AreWeInMoodleResourcesSection = (rawUrl) => {
+    return rawUrl.includes("resources");
+}
+
+const GetMoodleCourseId = (rawUrl) => {
+    const url = new URL(rawUrl);
+    const searchParams = url.searchParams;
+
+    return searchParams.get("id");
+}
+
+const GetResourcesPageUrl = (rawUrl, courseId) => {
+    const url = new URL(rawUrl);
+
+    return `${url.origin}/course/resources.php?id=${courseId}`;
+}
+
+const GoToResourcesPage = (rawUrl, courseId) => {
+    const resourcesPageUrl = GetResourcesPageUrl(rawUrl, courseId);
+
+    return new Promise((resolve, reject) => {
+        chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+            if (tabs.length > 0) {
+                chrome.tabs.update(tabs[0].id, { url: resourcesPageUrl });
+
+                resolve(true)
+            } else {
+                reject("No active tab found.");
+            }
+        });
     });
+}
+
+const GetActiveTabUrl = () => {
+    return new Promise((resolve, reject) => {
+        chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+            if (tabs.length > 0) {
+                const currentTab = tabs[0];
+                const currentURL = currentTab.url;
+
+                resolve(currentURL);
+            } else {
+                reject("No active tab found.");
+            }
+        });
+    });
+}
+
+const LoadResources = () => {
+    return new Promise((resolve, reject) => {
+        chrome.tabs.executeScript({ file: BACKGROUND_SCRIPT_FILE_PATH }, result => {
+            if (chrome.runtime.lastError)
+                reject(`[error]: from background.js script execution.`, chrome.runtime.lastError.message);
+            else
+                resolve(PopulateSelector(result[0], document.getElementById(RESOURCES_SELECTOR_ID)));
+        });
+    });
+}
+
+
+// NOTE: if the main function is executed, assume we are already in a moodle course page but not necessarily in the resources page.
+const Main = async () => {
+    const button = document.getElementById(MAIN_BUTTON_ID);
+    const input = document.getElementById(RESOURCES_SEARCH_INPUT_ID);
+
+    SetupEventListener(input, "input", FilterOptions);
+
+    const tabUrl = await GetActiveTabUrl();
+
+    if (!AreWeInMoodleSite(tabUrl) || !AreWeInMoodleCoursePage(tabUrl)) {
+        console.error("[moodle-downloader]: you are not in a Moodle site.");
+        return;
+    }
+
+    if (!AreWeInMoodleResourcesSection(tabUrl)) {
+        button.removeAttribute("disabled");
+        button.innerText = "Go to the Resources Page";
+
+        SetupEventListener(button, "click", async () => {
+            await GoToResourcesPage(tabUrl, GetMoodleCourseId(tabUrl));
+
+            resources = await LoadResources();
+        });
+    } else {
+        button.removeAttribute("disabled");
+        button.innerText = "Download Selected Resources";
+
+        resources = await LoadResources();
+
+        SetupEventListener(button, "click", DownloadSelectedResources);
+    }
+
 }
 
 const FilterOptions = () => {
@@ -125,8 +222,11 @@ const GenerateZipFilename = () => {
     const day = String(date.getDate()).padStart(2, '0');
     const month = String(date.getMonth() + 1).padStart(2, '0');
     const year = date.getFullYear();
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+    const seconds = String(date.getSeconds()).padStart(2, '0');
 
-    return `resources-${day}-${month}-${year}.zip`;
+    return `resources-${day}-${month}-${year}-${hours}-${minutes}-${seconds}.zip`;
 }
 
 const DownloadSelectedResources = async () => {
@@ -135,8 +235,6 @@ const DownloadSelectedResources = async () => {
     const selector = document.getElementById(RESOURCES_SELECTOR_ID);
 
     const selectedResourcesIds = Array.from(selector.selectedOptions).map(option => option.value);
-
-    console.log(`[resourcesIds]: ${selectedResourcesIds}`);
 
     selectedResourcesIds.forEach((selectedResourceId, index) => {
         const resource = resources.find(resource => resource.id === parseInt(selectedResourceId));
