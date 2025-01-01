@@ -4,20 +4,53 @@
  * https://github.com/harsilspatel/MoodleDownloader
  */
 
+// TODO: re-implement google analytics.
+
 // TODO: completely block the extension if we are not in a moodle page, to start with check that the url contains "moodle" in it, then make it more sofisticated by checking the page content, etc.
 // TODO: if the person isn't in a moodle page, display a blur with a message, but still give the option to display the extension and download in case the system hasn't been able to detect the moodle page.
 // TODO: give the choice for the user to manually enter the moodle course id, and then scrape the resources from the resources page.
 // TODO: give instructions, like some note with instructions that redirect to a video or something that shows how to download.
 // TODO: display the blur thing with a different message when the user is in a moodle site but not in a course page.
 
-const RESOURCES_DOWNLOADER_INTERVAL = 500;
 const BACKGROUND_SCRIPT_FILE_PATH = "./src/background.js";
+
 const RESOURCES_SELECTOR_ID = "resources-selector";
 const MAIN_BUTTON_ID = "main-button";
 const RESOURCES_SEARCH_INPUT_ID = "search";
-const FOOTER_ELEMENT_ID = "footer";
+
+const HIDER_CONTAINER_ID = "hider-container";
+const HIDER_TITLE_ID = "hider-title";
+const HIDER_DESCRIPTION_ID = "hider-description";
+const HIDER_BUTTON_ID = "hider-button";
 
 let resources = [];
+
+const HideHider = () => {
+    const hiderContainer = document.getElementById(HIDER_CONTAINER_ID);
+
+    hiderContainer.classList.add("hidden");
+    hiderContainer.classList.remove("block");
+}
+
+const DisplayHider = (title, description, buttonText, buttonCallback) => {
+    const hiderContainer = document.getElementById(HIDER_CONTAINER_ID);
+
+    // NOTE: important to be over here otherwise the getElementById will return null for the below elements
+    hiderContainer.classList.add("block");
+    hiderContainer.classList.remove("hidden");
+
+    const hiderTitle = document.getElementById(HIDER_TITLE_ID);
+    const hiderDescription = document.getElementById(HIDER_DESCRIPTION_ID);
+    const hiderButton = document.getElementById(HIDER_BUTTON_ID);
+
+    hiderTitle.innerText = title;
+    hiderDescription.innerText = description;
+    hiderButton.innerText = buttonText;
+
+    hiderButton.onclick = buttonCallback;
+
+    return hiderContainer;
+}
 
 const SetupEventListener = (element, event, callback) => {
     element.addEventListener(event, callback);
@@ -102,7 +135,7 @@ const LoadResources = () => {
             if (chrome.runtime.lastError)
                 reject(`[error]: from background.js script execution.`, chrome.runtime.lastError.message);
             else
-                resolve(PopulateSelector(result[0], document.getElementById(RESOURCES_SELECTOR_ID)));
+                resolve(result[0]);
         });
     });
 }
@@ -117,10 +150,33 @@ const Main = async () => {
 
     const tabUrl = await GetActiveTabUrl();
 
-    if (!AreWeInMoodleSite(tabUrl) || !AreWeInMoodleCoursePage(tabUrl)) {
+    if (!AreWeInMoodleSite(tabUrl)) {
         console.error("[moodle-downloader]: you are not in a Moodle site.");
+
+        DisplayHider(
+            "Not a Moodle Site",
+            "You are not in a Moodle site. Please navigate to a Moodle site and then click the button.",
+            "Still Proceed",
+            HideHider
+        )
+
         return;
     }
+
+    if (!AreWeInMoodleCoursePage(tabUrl)) {
+        console.error("[moodle-downloader]: you are not in a Moodle course page.");
+
+        DisplayHider(
+            "Not a Moodle Course Page",
+            "You are not in a Moodle course page. Please navigate to the Moodle course page you want to download the resources from.",
+            "Still Proceed",
+            HideHider
+        )
+
+        return;
+    }
+
+    HideHider()
 
     if (!AreWeInMoodleResourcesSection(tabUrl)) {
         button.removeAttribute("disabled");
@@ -130,12 +186,16 @@ const Main = async () => {
             await GoToResourcesPage(tabUrl, GetMoodleCourseId(tabUrl));
 
             resources = await LoadResources();
+
+            PopulateSelector(resources, document.getElementById(RESOURCES_SELECTOR_ID));
         });
     } else {
         button.removeAttribute("disabled");
         button.innerText = "Download Selected Resources";
 
         resources = await LoadResources();
+
+        PopulateSelector(resources, document.getElementById(RESOURCES_SELECTOR_ID));
 
         SetupEventListener(button, "click", DownloadSelectedResources);
     }
@@ -194,11 +254,7 @@ const DownloadURLResource = async (unresolvedUrl, index) => {
 }
 
 const DownloadUnknownResource = (resource, index) => {
-    console.log("[unknown-downloader]: downloading resource.");
-
-    setTimeout(() => {
-        chrome.downloads.download(resource.downloadOptions);
-    }, index * RESOURCES_DOWNLOADER_INTERVAL);
+    console.error("[unknown-downloader]: downloading resource.");
 }
 
 const RESOURCES_TYPES_DOWNLOADERS = {

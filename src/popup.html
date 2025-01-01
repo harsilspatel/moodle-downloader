@@ -9,39 +9,58 @@
   <script src="./popup.js"></script>
 </head>
 
-<div class="p-0 bg-white w-96 h-64 flex flex-col items-center gap-0">
-  <!-- CARD HEADER -->
-  <div class="w-full p-4 border-b border-gray-500 flex flex-row items-center justify-between">
-    <div>
-      <h2 class="text-xl font-semibold">📚 Moodle Downloader</h2>
-    </div>
-    <a href="https://github.com/raideno/better-moodle-downloader" target="_blank">
-      <div class="bg-blue-200 rounded-full w-6 h-6 flex items-center justify-center cursor-pointer">
-        <div class="font-bold text-xs">i</div>
+<body>
+  <!-- CARD -->
+  <div class=" w-96 h-64">
+    <!-- HIDER -->
+    <div id="hider-container" class="absolute z-50 w-full h-full bg-blue-200 top-0 left-0 bg-opacity-50 backdrop-blur">
+      <div class="w-full h-full flex flex-col items-center justify-center gap-2 p-4">
+        <div class="flex flex-col items-center justify-center gap-1">
+          <div id="hider-title" class="text-lg font-bold text-gray-900">Hider Title</div>
+          <div id="hider-description" class="text-sm text-gray-800 text-center">Lorem ipsum dolor sit amet consectetur
+            adipisicing elit. Amet, molestias?</div>
+        </div>
+        <div id="hider-button" class="cursor-pointer hover:opacity-75 font-semibold underline text-blue-800">Hider
+          Hider Action
+        </div>
       </div>
-    </a>
-  </div>
-
-  <!-- CARD CONTENT -->
-  <div class="w-full p-4 border-b border-gray-500 space-y-2">
-    <div class="border rounded border-gray-500 active:border-blue-500">
-      <input class="w-full p-2 rounded" placeholder="search (regex is supported)" type="text" id="search">
     </div>
 
-    <div class="w-full p-2 rounded border border-gray-500 active:border-blue-500">
-      <select multiple class="w-full text-base rounded" id="resources-selector"></select>
+    <div class="p-0 bg-white w-full h-full flex flex-col items-center gap-0">
+      <!-- CARD HEADER -->
+      <div class="w-full p-4 border-b border-gray-500 flex flex-row items-center justify-between">
+        <div>
+          <h2 class="text-xl font-semibold">📚 Moodle Downloader</h2>
+        </div>
+        <a href="https://github.com/raideno/better-moodle-downloader" target="_blank">
+          <div class="bg-blue-200 rounded-full w-6 h-6 flex items-center justify-center cursor-pointer">
+            <div class="font-bold text-xs">i</div>
+          </div>
+        </a>
+      </div>
+
+      <!-- CARD CONTENT -->
+      <div class="w-full p-4 border-b border-gray-500 space-y-2">
+        <div class="border rounded border-gray-500 active:border-blue-500">
+          <input class="w-full p-2 rounded" placeholder="search (regex is supported)" type="text" id="search">
+        </div>
+
+        <div class="w-full p-2 rounded border border-gray-500 active:border-blue-500">
+          <select multiple class="w-full text-base rounded" id="resources-selector"></select>
+        </div>
+      </div>
+
+      <!-- CARD FOOTER -->
+      <div class="w-full p-4 flex flex-col gap-1">
+        <div><span class="font-semibold text-red-500">NOTE: </span>In order to download moodle resources you must be in
+          the
+          resources page of the moodle course.</div>
+
+        <button class="w-full bg-blue-500 p-4 rounded text-white font-bold disabled:bg-gray-500 disabled:opacity-50"
+          id="main-button" disabled>Main Button</button>
+      </div>
     </div>
   </div>
-
-  <!-- CARD FOOTER -->
-  <div class="w-full p-4 flex flex-col gap-1">
-    <div><span class="font-semibold text-red-500">NOTE: </span>In order to download moodle resources you must be in the
-      resources page of the moodle course.</div>
-
-    <button class="w-full bg-blue-500 p-4 rounded text-white font-bold disabled:bg-gray-500 disabled:opacity-50"
-      id="main-button" disabled>Main Button</button>
-  </div>
-</div>
 </body>
 
 </html>
