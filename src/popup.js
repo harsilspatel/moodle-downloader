@@ -4,6 +4,11 @@
  * https://github.com/harsilspatel/MoodleDownloader
  */
 
+import { GenerateZipFilename } from "./modules/utils.js"
+import { HideHider, DisplayHider } from "./modules/hider.js"
+import { GetActiveTabUrl, NavigateTo } from "./modules/tabs.js"
+import { AreWeInMoodleSite, AreWeInMoodleCoursePage, AreWeInMoodleResourcesSection, GetMoodleCourseId, GetResourcesPageUrl } from "./modules/moodle-urls.js"
+
 // TODO: re-implement google analytics.
 
 // TODO: completely block the extension if we are not in a moodle page, to start with check that the url contains "moodle" in it, then make it more sofisticated by checking the page content, etc.
@@ -18,39 +23,7 @@ const RESOURCES_SELECTOR_ID = "resources-selector";
 const MAIN_BUTTON_ID = "main-button";
 const RESOURCES_SEARCH_INPUT_ID = "search";
 
-const HIDER_CONTAINER_ID = "hider-container";
-const HIDER_TITLE_ID = "hider-title";
-const HIDER_DESCRIPTION_ID = "hider-description";
-const HIDER_BUTTON_ID = "hider-button";
-
 let resources = [];
-
-const HideHider = () => {
-    const hiderContainer = document.getElementById(HIDER_CONTAINER_ID);
-
-    hiderContainer.classList.add("hidden");
-    hiderContainer.classList.remove("block");
-}
-
-const DisplayHider = (title, description, buttonText, buttonCallback) => {
-    const hiderContainer = document.getElementById(HIDER_CONTAINER_ID);
-
-    // NOTE: important to be over here otherwise the getElementById will return null for the below elements
-    hiderContainer.classList.add("block");
-    hiderContainer.classList.remove("hidden");
-
-    const hiderTitle = document.getElementById(HIDER_TITLE_ID);
-    const hiderDescription = document.getElementById(HIDER_DESCRIPTION_ID);
-    const hiderButton = document.getElementById(HIDER_BUTTON_ID);
-
-    hiderTitle.innerText = title;
-    hiderDescription.innerText = description;
-    hiderButton.innerText = buttonText;
-
-    hiderButton.onclick = buttonCallback;
-
-    return hiderContainer;
-}
 
 const SetupEventListener = (element, event, callback) => {
     element.addEventListener(event, callback);
@@ -73,60 +46,10 @@ const PopulateSelector = (resources, selector, selectAll = true) => {
     return resources;
 }
 
-const AreWeInMoodleSite = (rawUrl) => {
-    return rawUrl.includes("moodle");
-}
-
-const AreWeInMoodleCoursePage = (rawUrl) => {
-    return rawUrl.includes("course");
-}
-
-const AreWeInMoodleResourcesSection = (rawUrl) => {
-    return rawUrl.includes("resources");
-}
-
-const GetMoodleCourseId = (rawUrl) => {
-    const url = new URL(rawUrl);
-    const searchParams = url.searchParams;
-
-    return searchParams.get("id");
-}
-
-const GetResourcesPageUrl = (rawUrl, courseId) => {
-    const url = new URL(rawUrl);
-
-    return `${url.origin}/course/resources.php?id=${courseId}`;
-}
-
 const GoToResourcesPage = (rawUrl, courseId) => {
     const resourcesPageUrl = GetResourcesPageUrl(rawUrl, courseId);
 
-    return new Promise((resolve, reject) => {
-        chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-            if (tabs.length > 0) {
-                chrome.tabs.update(tabs[0].id, { url: resourcesPageUrl });
-
-                resolve(true)
-            } else {
-                reject("No active tab found.");
-            }
-        });
-    });
-}
-
-const GetActiveTabUrl = () => {
-    return new Promise((resolve, reject) => {
-        chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-            if (tabs.length > 0) {
-                const currentTab = tabs[0];
-                const currentURL = currentTab.url;
-
-                resolve(currentURL);
-            } else {
-                reject("No active tab found.");
-            }
-        });
-    });
+    return NavigateTo(resourcesPageUrl);
 }
 
 const LoadResources = () => {
@@ -139,7 +62,6 @@ const LoadResources = () => {
         });
     });
 }
-
 
 // NOTE: if the main function is executed, assume we are already in a moodle course page but not necessarily in the resources page.
 const Main = async () => {
@@ -232,7 +154,6 @@ const UrlResolver = async (initialUrl) => {
     }
 }
 
-
 const DownloadURLResource = async (unresolvedUrl, index) => {
     const url = await UrlResolver(unresolvedUrl);
 
@@ -270,19 +191,6 @@ const DownloadResource = (resource, index) => {
     });
 
     return downloads;
-}
-
-const GenerateZipFilename = () => {
-    const date = new Date();
-
-    const day = String(date.getDate()).padStart(2, '0');
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const year = date.getFullYear();
-    const hours = String(date.getHours()).padStart(2, '0');
-    const minutes = String(date.getMinutes()).padStart(2, '0');
-    const seconds = String(date.getSeconds()).padStart(2, '0');
-
-    return `resources-${day}-${month}-${year}-${hours}-${minutes}-${seconds}.zip`;
 }
 
 const DownloadSelectedResources = async () => {
